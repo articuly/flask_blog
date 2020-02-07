@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+{% block head %}
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>清心涟漪 - 网页开发项目</title>
+        <link rel="stylesheet" type="text/css" href="{{ url_for("static", filename="css/bootstrap.css") }}"/>
+        <link rel="stylesheet" type="text/css" href="{{ url_for("static", filename="css/bootstrap-theme.css") }}"/>
+        <style type="text/css">
+            footer {
+                padding: 15px;
+                background: #8c8989;
+                text-align: center;
+            }
+
+            footer nav {
+                margin: auto;
+                width: 300px;
+            }
+
+            .carousel-control.right, .carousel-control.left {
+                background-image: none;
+            }
+
+            .row {
+                margin-top: 15px;
+                margin-bottom: 8px;
+            }
+
+            .panel {
+                margin-top: 15px;
+            }
+        </style>
+    </head>
+{% endblock %}
+<body>
+{% block nav %}
+    <nav class="navbar navbar-default">
+        <div class="container-fluid" style="background-color: #C1F48C;">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                        data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">展开导航</span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">清心涟漪</a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li><a href="/">首页</a></li>
+                    <li><a href="#">技术文章</a></li>
+                    <!-- <li class="dropdown">
+                      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+                      <ul class="dropdown-menu">
+                        <li><a href="#">Action</a></li>
+                        <li><a href="#">Another action</a></li>
+                        <li><a href="#">Something else here</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="#">Separated link</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="#">One more separated link</a></li>
+                      </ul>
+                    </li> -->
+                </ul>
+                <form class="navbar-form navbar-left">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="请输入您要搜索的内容">
+                    </div>
+                    <button type="submit" class="btn btn-default">搜索</button>
+                </form>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="{{ url_for("login") }}">登陆</a></li>
+                    <li><a href="{{ url_for("user_app.register") }}">注册</a></li>
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>
+{% endblock %}
+
+{% block content %}
+    每个页面不同部分
+{% endblock %}
+
+{% block footer %}
+    <footer>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    Copyright 2007 - 2020 Articuly | All Rights Reserved | Powered by Bootstrap & Flask
+                </div>
+            </div>
+        </div>
+        <nav>
+            <ul class="nav nav-pills">
+                <li><a href="" data-toggle="modal" data-target="#myModal">隐私政策</a></li>
+                <li><a href="https://articuly.com" target="_blank">作者博客</a></li>
+                <li><a href="">给我留言</a></li>
+            </ul>
+        </nav>
+        <!-- Modal -->
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                        <h3 class="modal-title" id="myModalLabel"><b>隐私政策</b>
+                        </h3>
+                    </div>
+                    <div class="modal-body">
+                        <h4><b>我们是谁</b></h4>
+                        <p class="text-left">我是一名独立博客的博主、Python全栈工程师。</p>
+                        <p class="text-left">我的站点地址是：https://articuly.com。</p>
+                        <h4><b>我们收集何种数据</b></h4>
+                        <p class="text-left"><i>评论：</i>当访客留下评论时，我们会收集评论表单所显示的数据，和访客的IP地址及浏览器的user
+                            agent字符串来帮助检查垃圾评论。由您的电子邮件地址所生成的匿名化字符串（又称为哈希）可能会被提供给Gravatar服务确认您是否有使用该服务。</p>
+                        <p class="text-left"><i>媒体：</i>如果您向此网站上传图片，您应当避免上传那些有嵌入地理位置信息（EXIF
+                            GPS）的图片。此网站的访客将可以下载并提取此网站的图片中的位置信息。</p>
+                        <p class="text-left"><i>联系表单：</i>建议使用电子邮件来联系此站管理员。</p>
+                        <p class="text-left"><i>Cookies：</i>如果您在我们的站点上留下评论，您可以选择用cookies保存您的姓名、电子邮件地址和网站。这是通过让您可以不用在评论时再次填写相关内容而向您提供方便。这些cookies会保留一年。如果您编辑或发布文章，我们会在您的浏览器中保存一个额外的cookie。这个cookie不包含个人数据而只记录了您刚才编辑的文章的ID。这个cookie会保留一天。
+                        </p>
+                        <p class="text-left"><i>统计：</i>此站点使用Google Analytics和百度统计。</p>
+                        <h4><b>我们与谁共享您的信息</b></h4>
+                        <p class="text-left">我们不与其他任何人共享您的信息。</p>
+                        <h4><b>我们保留多久您的信息</b></h4>
+                        <p class="text-left">如果您留下评论，评论和其元数据将被无限期保存。我们这样做以便能识别并自动批准任何后续评论，而不用将这些后续评论加入待审队列。</p>
+                        <p class="text-left">
+                            对于本网站的注册用户，我们也会保存用户在个人资料中提供的个人信息。所有用户可以在任何时候查看、编辑或删除他们的个人信息（除了不能变更用户名外）、站点管理员也可以查看及编辑那些信息。</p>
+                        <h4><b>您对您的信息有什么权利</b></h4>
+                        <p class="text-left">
+                            如果您有此站点的账户，或曾经留下评论，您可以请求我们提供我们所拥有的您的个人数据的导出文件，这也包括了所有您提供给我们的数据。您也可以要求我们抹除所有关于您的个人数据。这不包括我们因管理、法规或安全需要而必须保留的数据。</p>
+                        <h4><b>我们将您的信息发送到哪</b></h4>
+                        <p class="text-left">访客评论可能会被自动垃圾评论监测服务检查。</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">我已知悉</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script type="text/javascript" src="{{ url_for("static", filename="js/jquery-3.4.1.min.js") }}"></script>
+    <script type="text/javascript" src="{{ url_for("static", filename="js/bootstrap.min.js") }}"></script>
+{% endblock %}
+</body>
+</html>

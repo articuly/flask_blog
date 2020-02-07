@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+<!DOCTYPE html>
+<html>
+<body>
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="main col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-12">
+                <h2 class="text-center"><b>文章管理</b></h2>
+                <div class="panel">
+                    <form action="" method="post" class="form-horizontal">
+                        <div class="form-group">
+                            <label for="q" class="col-xs-2 control-label">关键字：</label>
+                            <div class="col-xs-8">
+                                <input type="text" name="q" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="field" class="col-xs-2 control-label">查询字段：</label>
+                            <div class="col-xs-8">
+                                <select name="field" class="form-control">
+                                    <option value="title">根据标题查找</option>
+                                    <option value="content">根据文章内容查找</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="排序" class="col-xs-2 control-label">排序：</label>
+                            <div class="col-xs-8">
+                                <select name="order" class="form-control">
+                                    <option value="1" checked>按照id升序排序</option>
+                                    <option value="2">按照id降序排序</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group ">
+                            <input type="submit" name="search" class="btn btn-primary pull-right" value="立即搜索">
+                        </div>
+                    </form>
+                </div>
+
+                <table class="table">
+                    <tr>
+                        <td>总页数:{{ pages }}/总记录:{{ total }}</td>
+                    </tr>
+                </table>
+                <table class="table table-bordered ">
+                    <tr>
+                        <th>文章ID</th>
+                        <th>文章标题</th>
+                        <th>作者</th>
+                        <th>发布日期</th>
+                        <th>操作</th>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+</body>
+</html>
