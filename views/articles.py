@@ -1,6 +1,6 @@
 from flask import request, redirect, url_for, render_template
 from libs import db
-from models import Article
+from models import Article, Category
 from flask import Blueprint
 
 article_app = Blueprint('article_app', __name__)
@@ -80,3 +80,36 @@ def edit(article_id):
         db.session.commit()
         return redirect(url_for('article_app.list'))
     return render_template('article/edit_article.html', article=article)
+
+
+# 分类视图部分
+# 添加分类
+@article_app.route('/add_cate', methods=['get', 'post'])
+def addCate():
+    message = None
+    if request.method == 'POST':
+        cate_name = request.form['name']
+        cate_order = request.form['order']
+        category = Category(
+            cate_name=cate_name,
+            cate_order=cate_order,
+        )
+        try:
+            db.session.add(category)
+            db.session.commit()
+            message = cate_name + '分类添加成功'
+        except Exception as e:
+            message = '发生了错误：' + str(e)
+            # 如果插入失败，进行回滚操作
+            db.session.rollback()
+    return render_template('category/add.html', message=message)
+
+
+# 获得分类列表
+@article_app.route('/cate_list/<int:page>', methods=['get'])
+@article_app.route('/cate_list',defaults={'page':1}, methods=['get'])
+def cateList(page):
+    res = Category.query.order_by(Category.cate_order).paginate(page,10)
+    cates=res.items
+    pageList=res.iter_pages()
+    return render_template('category/list.html', cates=cates, pageList=pageList)

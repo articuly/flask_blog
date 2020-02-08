@@ -71,7 +71,7 @@
                         {% if page!=None %}
                             <li><a href="{{ url_for("user_app.userList", page=page) }}">{{ page }}</a></li>
                         {% else %}
-                            <li><a href>...</a></li>
+                            <li><a href="#">...</a></li>
                         {% endif %}
                     {% endfor %}
                 </ul>

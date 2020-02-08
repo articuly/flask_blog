@@ -80,7 +80,7 @@
                         {% if page!=None %}
                             <li><a href="{{ url_for("article_app.list", page=page) }}">{{ page }}</a></li>
                         {% else %}
-                            <li><a href="">...</a></li>
+                            <li><a href="#">...</a></li>
                         {% endif %}
                     {% endfor %}
                 </ul>

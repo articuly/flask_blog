@@ -1,0 +1,43 @@
+{% extends'base.html' %}
+<!DOCTYPE html>
+<html>
+<body>
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="main col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-12">
+                <h2 class="text-center"><b>分类管理</b></h2>
+                <table class="table table-bordered ">
+                    <tr>
+                        <th>分类id</th>
+                        <th>分类名</th>
+                        <th>分类顺序</th>
+                        <th>管理操作</th>
+                    </tr>
+                    {% for cate in cates %}
+                        <tr>
+                            <td>{{ cate.cate_id }}</td>
+                            <td>{{ cate.cate_name }}</td>
+                            <td>{{ cate.cate_order }}</td>
+                            <td>
+                                <a href="">编辑</a>
+                                <a href="">删除</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+                <ul class="pagination">
+                    {% for page in pageList %}
+                        {% if page!=None %}
+                            <li><a href="{{ url_for("article_app.cateList", page=page) }}">{{ page }}</a></li>
+                        {% else %}
+                            <li><a href="#">...</a></li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+</body>
+</html>
