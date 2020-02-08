@@ -1,0 +1,26 @@
+{% extends'base.html' %}
+<!DOCTYPE html>
+<html>
+<body>
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="main col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-12">
+                <h2 class="text-center"><b>文章详情</b></h2>
+                <article class="content">
+                    <h3>{{ article.title }}</h3>
+                    <div class="body">
+                        <blockquote>
+                            {{ article.intro }}
+                        </blockquote>
+                        {{ article.content |safe }}
+                    </div>
+                </article>
+                <div class="row"></div>
+                <div class="row"></div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+</body>
+</html>

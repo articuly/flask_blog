@@ -24,7 +24,7 @@ def create_random_user(n):
         user = User(
             realname='-',
             username=username,
-            password='123654',  # default password is 123654
+            password='123456',  # default password is 123456
             sex=sex,
             city=city,
             hobby=hobby,
