@@ -43,6 +43,8 @@
             </div>
         </div>
     </div>
+    <script src="{{ url_for('static', filename="ckeditor/ckeditor.js") }}"></script>
+    <script>CKEDITOR.replace('content')</script>
 {% endblock %}
 </body>
 </html>
