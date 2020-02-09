@@ -8,20 +8,20 @@
             <div class="main col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-12">
                 <h2 class="text-center"><b>发布文章</b></h2>
                 {% if message !=None %}
-                <div class="alert alert-info" id="message" role="alert">
-                    {{ message }}
-                </div>
+                    <div class="alert alert-info" id="message" role="alert">
+                        {{ message }}
+                    </div>
                 {% endif %}
                 <div class="body">
                     <form action="" method="post">
-{#                        <div class="form-group">#}
-{#                            <label for="cate">文章分类:</label>#}
-{#                            <select name="cate" id="cate" class="form-control">#}
-{#                                {% for cate in cates %}#}
-{#                                    <option value="{{ cate.cate_id }}">{{ cate.cate_name }}</option>#}
-{#                                {% endfor %}#}
-{#                            </select>#}
-{#                        </div>#}
+                        <div class="form-group">
+                            <label for="cate">文章分类:</label>
+                            <select name="cate" id="cate" class="form-control">
+                                {% for cate in cates %}
+                                    <option value="{{ cate.cate_id }}">{{ cate.cate_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
                         <div class="form-group">
                             <label for="name">标题：</label>
                             <input class="form-control" type="text" name="title" id="title" value="" placeholder="文章标题">

@@ -1,5 +1,5 @@
 from flask import request, redirect, url_for, render_template
-from libs import db
+from libs import db, login_required
 from models import User
 from flask import Blueprint
 
@@ -29,6 +29,8 @@ def register():
             city=city,
             intro=intro,
         )
+        # 密码加码
+        user.hash_password(password)
         try:
             db.session.add(user)
             db.session.commit()
@@ -47,6 +49,7 @@ def validate_username(username):
 # 用户列表功能
 @user_app.route('/list/<int:page>', methods=['get', 'post'])
 @user_app.route('/list', defaults={'page': 1}, methods=['get', 'post'])
+@login_required
 def userList(page):
     if request.method == 'POST':
         q = request.form['q']
@@ -79,8 +82,9 @@ def userList(page):
 
 # 根据用户id删除用户
 @user_app.route('/delete/<int:user_id>')
+@login_required
 def deleteUser(user_id):
-    if user_id != 1:  # 防止admin被删除
+    if user_id != 100:  # 防止admin被删除
         user = User.query.get(user_id)
         db.session.delete(user)
         db.session.commit()
@@ -91,6 +95,7 @@ def deleteUser(user_id):
 
 # 用户信息修改
 @user_app.route("/edit/<int:user_id>", methods=['get', 'post'])
+@login_required
 def editUser(user_id):
     user = User.query.get(user_id)
     if request.method == "POST":

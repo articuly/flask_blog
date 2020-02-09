@@ -4,8 +4,9 @@ import random
 
 
 def create_admin():
-    user = User(realname='admin', username='admin', password='123654', sex='1', city='020', hobby='writing',
+    user = User(realname='admin', username='admin', sex='1', city='020', hobby='writing',
                 intro='administrator')
+    user.hash_password('123654')
     db.session.add(user)
     db.session.commit()
 
@@ -24,12 +25,12 @@ def create_random_user(n):
         user = User(
             realname='-',
             username=username,
-            password='123456',  # default password is 123456
             sex=sex,
             city=city,
             hobby=hobby,
             intro=''
         )
+        user.hash_password('123456')  # default password is 123456
         db.session.add(user)
     db.session.commit()
 

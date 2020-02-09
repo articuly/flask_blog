@@ -20,8 +20,8 @@
                             <td>{{ cate.cate_name }}</td>
                             <td>{{ cate.cate_order }}</td>
                             <td>
-                                <a href="">编辑</a>
-                                <a href="">删除</a>
+                                <a href="{{ url_for("article_app.editCate", cate_id=cate.cate_id) }}">编辑</a>
+                                <a href="{{ url_for("article_app.deleteCate", cate_id=cate.cate_id) }}">删除</a>
                             </td>
                         </tr>
                     {% endfor %}
@@ -35,6 +35,11 @@
                         {% endif %}
                     {% endfor %}
                 </ul>
+                <div class="row"></div>
+                <a href="{{ url_for("article_app.addCate") }}"><input type="button" name="post"
+                                                                      class="btn btn-primary pull-right"
+                                                                      value="添加分类"></a>
+                <div class="row"></div>
             </div>
         </div>
     </div>
