@@ -42,11 +42,13 @@ def create_random_article(n):
         intro= 'test for ' + title
         author = 'admin'
         content= ''.join(words)
+        cate_id=random.randint(1,7)
         article = Article(
             title=title,
             intro=intro,
             author=author,
-            content=content
+            content=content,
+            cate_id=cate_id
         )
         db.session.add(article)
     db.session.commit()

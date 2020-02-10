@@ -1,7 +1,7 @@
 from flask import Flask, render_template
 from flask import request, redirect, url_for, session, make_response
 from flask_migrate import Migrate
-from models import User, Category
+from models import User, Category, Article
 from libs import db
 from views.users import user_app
 from views.articles import article_app
@@ -17,14 +17,18 @@ app.register_blueprint(user_app, url_prefix="/user")
 app.register_blueprint(article_app, url_prefix='/article')
 
 
-@app.route('/')
-def html():
-    return render_template('index.html')
+@app.route('/<int:page>')
+@app.route('/', defaults={'page': 1})
+def html(page):
+    res = Article.query.order_by(Article.id.desc()).paginate(page, 10)
+    articles = res.items
+    pageList = res.iter_pages()
+    return render_template('index.html', page=page, articles=articles, pageList=pageList)
 
 
 @app.route('/index')
 def index():
-    return render_template('index.html')
+    return redirect(url_for('html'))
 
 
 @app.route('/login', methods=['get', 'post'])

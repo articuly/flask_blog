@@ -9,12 +9,13 @@ article_app = Blueprint('article_app', __name__)
 @article_app.route("/post", methods=['get', 'post'])
 @login_required
 def post():
-    message = None
     if request.method == "POST":
+        cate_id = request.form['cate']
         title = request.form['title']
         intro = request.form['intro']
         content = request.form['content']
         article = Article(
+            cate_id=cate_id,
             title=title,
             intro=intro,
             content=content,
@@ -22,8 +23,10 @@ def post():
         )
         db.session.add(article)
         db.session.commit()
-        message = "文章发布成功"
-    return render_template("article/post.html", message=message)
+        import json
+        message = {"message": "文章发布成功"}
+        return json.dumps(message)
+    return render_template("article/post.html")
 
 
 @article_app.route("/list/<int:page>", methods=['get', 'post'])
@@ -77,6 +80,7 @@ def view(article_id):
 def edit(article_id):
     article = Article.query.get(article_id)
     if request.method == 'POST':
+        article.cate_id = request.form['cate']
         article.title = request.form['title']
         article.intro = request.form['intro']
         article.content = request.form['content']
@@ -95,9 +99,11 @@ def getArticleList(cate_id, page):
         res = Article.query.paginate(page, 15)
     else:
         res = Article.query.filter_by(cate_id=cate_id).paginate(page, 15)
+    category = Category.query.get(cate_id)
     articles = res.items
     pageList = res.iter_pages()
-    return render_template('index.html', articles=articles, pageList=pageList)
+    return render_template('cate_articles.html', cate_id=cate_id, articles=articles, pageList=pageList,
+                           category=category)
 
 
 # 添加分类

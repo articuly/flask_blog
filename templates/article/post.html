@@ -7,13 +7,13 @@
         <div class="row">
             <div class="main col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-12">
                 <h2 class="text-center"><b>发布文章</b></h2>
-                {% if message !=None %}
-                    <div class="alert alert-info" id="message" role="alert">
+                {% if message!=None %}
+                <div class="alert alert-info" id="message" role="alert">
                         {{ message }}
-                    </div>
+                </div>
                 {% endif %}
                 <div class="body">
-                    <form action="" method="post">
+                    <form action="" method="post" id="form1">
                         <div class="form-group">
                             <label for="cate">文章分类:</label>
                             <select name="cate" id="cate" class="form-control">
@@ -35,8 +35,8 @@
                             <textarea name="content" id="content" rows="15" cols="10" class="form-control"></textarea>
                         </div>
                         <div class="form-group">
-                            <input class="btn" type="submit" name="submit" id="btn1" value="发表文章"/>
-                            <input class="btn" type="reset" name="reset" id="btn2" value="重设"/>
+                            <input class="btn" type="button" name="btn" id="btn1" value="发表文章"/>
+                            <input class="btn" type="reset" name="reset_btn" id="btn2" value="重设"/>
                         </div>
                     </form>
                 </div>
@@ -45,6 +45,82 @@
     </div>
     <script src="{{ url_for('static', filename="ckeditor/ckeditor.js") }}"></script>
     <script>CKEDITOR.replace('content')</script>
+    {#    <script>#}
+    {#        btn = document.getElementById("btn1")#}
+    {#        btn.onclick = function (ev) {#}
+    {#            cate_id = $("#cate").val()#}
+    {#            title = $("#title").val()#}
+    {#            intro = $("#intro").val()#}
+    {#            content = CKEDITOR.instances["content"].getData()#}
+    {##}
+    {#            if (title == "") {#}
+    {#                $("#title").focus()#}
+    {#                return false#}
+    {#            }#}
+    {#            if (intro == "") {#}
+    {#                $("#intro").focus()#}
+    {#                return false#}
+    {#            }#}
+    {##}
+    {#            $.ajax({#}
+    {#                type: "post",#}
+    {#                data: {#}
+    {#                    "cate": cate_id,#}
+    {#                    "title": title,#}
+    {#                    "intro": intro,#}
+    {#                    "content": content#}
+    {#                },#}
+    {#                dataType: "json",#}
+    {#                success: function (data) {#}
+    {#                    $("#message").html(data.message)#}
+    {#                    //表单重置，相当于点击重设按钮#}
+    {#                    $("form")[0].reset()#}
+    {#                    CKEDITOR.instances["content"].setData()#}
+    {#                }#}
+    {#            })#}
+    {#        }#}
+    {#    </script>#}
+    <script>
+        btn = document.getElementById("btn1")
+        btn.onclick = function (ev) {
+            cate_id = $("#cate").val()
+            title = $("#title").val()
+            intro = $("#intro").val()
+            content = CKEDITOR.instances['content'].getData()
+            console.log(cate_id, title, intro, content)
+            if (title == "") {
+                $("#title").focus()
+                return false
+            }
+            if (intro == "") {
+                $("#intro").focus()
+                return false
+            }
+            if (content == "") {
+                CKEDITOR.instances["content"].focus()
+                return false
+            }
+            $.ajax({
+                type: "post",
+                data: {
+                    "cate": cate_id,
+                    "title": title,
+                    "intro": intro,
+                    "content": content
+                },
+                dataType: "json",
+                success: function (data) {
+                    $("#message").html(data.message)
+                    console.log(data.message)
+                    //表单重置，相当于点击重设按钮
+                    console.log('form is', $("#form1")[0])
+                    $("#form1")[0].reset()
+                    console.log('form is', $("#form1")[0])
+                    CKEDITOR.instances["content"].setData()
+                }
+            })
+        }
+    </script>
 {% endblock %}
 </body>
 </html>

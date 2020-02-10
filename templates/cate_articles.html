@@ -1,41 +1,21 @@
-{% extends "base.html" %}
+{% extends'base.html' %}
 <!DOCTYPE html>
 <html>
+<head>
+
+</head>
 <body>
 {% block content %}
+    <ol class="breadcrumb">
+        <li><a href="{{ url_for('html') }}">主页</a></li>
+        <li><a href="#">文章分类</a></li>
+        <li class="active">{{ category.cate_name }}</li>
+    </ol>
     <main>
-        <div id="myCarousel" class="carousel slide">
-            <ol class="carousel-indicators">
-                <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-                <li data-target="#myCarousel" data-slide-to="1"></li>
-                <li data-target="#myCarousel" data-slide-to="2"></li>
-            </ol>
-            <!-- 旋转木马项目 -->
-            <div class="carousel-inner">
-                <div class="active item"><img src="{{ url_for('static', filename='img/star-player.jpg') }}" width="80%"
-                                              class="img-responsive center-block"></div>
-                <div class="item"><img src="{{ url_for('static', filename='img/love.jpg') }}" width="80%"
-                                       class="img-responsive center-block">
-                </div>
-                <div class="item"><img src="{{ url_for('static', filename='img/mobile.jpg') }}" width="80%"
-                                       class="img-responsive center-block">
-                </div>
-            </div>
-            <!-- 旋转木马导航 -->
-            <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
-            <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
-        </div>
-
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-5 col-md-offset-2 col-sm-5 col-sm-offset-1">
                     <div class="alert alert-info" role="alert">公告：春节离线，有事电话联系</div>
-                    <div class="jumbotron">
-                        <h1>Hello, python!</h1>
-                        <p>
-                            Python是用来编写应用程序的高级编程语言，它“优雅”、“明确”、“简单”。Python就为我们提供了非常完善的基础代码库。人工智能、大数据、数据分析、网站项目等领域的开发编程都可使用Python完成。</p>
-                        <p><a class="btn btn-primary btn-lg" href="#" role="button">立即报名学习</a></p>
-                    </div>
                     {% for article in articles %}
                         <div class="list-group">
                             <a href="{{ url_for('article_app.view', article_id=article.id) }}" class="list-group-item">
@@ -48,19 +28,19 @@
                         <ul class="pagination">
                             {% for page in pageList %}
                                 {% if page!=None %}
-                                    {#                            <li>#}
-                                    {#                                <a href="{{ url_for('article_app.getArticleList', cate_id=cate_id, page=page ) }}" aria-label="Previous">#}
-                                    {#                                    <span aria-hidden="true">&laquo;</span>#}
-                                    {#                                </a>#}
-                                    {#                            </li>#}
-                                    <li><a href="{{ url_for('html', page=page) }}">{{ page }}</a></li>
-                                    {#                            <li>#}
-                                    {#                                <a href="{{ url_for('article_app.getArticleList', cate_id=cate_id, page=page) }}" aria-label="Next">#}
-                                    {#                                    <span aria-hidden="true">&raquo;</span>#}
-                                    {#                                </a>#}
-                                    {#                            </li>#}
+{#                            <li>#}
+{#                                <a href="{{ url_for('article_app.getArticleList', cate_id=cate_id, page=page ) }}" aria-label="Previous">#}
+{#                                    <span aria-hidden="true">&laquo;</span>#}
+{#                                </a>#}
+{#                            </li>#}
+                            <li><a href="{{ url_for('article_app.getArticleList', cate_id=cate_id, page=page) }}">{{ page }}</a></li>
+{#                            <li>#}
+{#                                <a href="{{ url_for('article_app.getArticleList', cate_id=cate_id, page=page) }}" aria-label="Next">#}
+{#                                    <span aria-hidden="true">&raquo;</span>#}
+{#                                </a>#}
+{#                            </li>#}
                                 {% else %}
-                                    <li><a href="#">...</a></li>
+                                <li><a href="#">...</a></li>
                                 {% endif %}
                             {% endfor %}
                         </ul>
