@@ -6,13 +6,13 @@
     <div class="container-fluid">
         <div class="row">
             <div class="main col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-12">
-                <h2 class="text-center"><b>文章详情</b></h2>
+                <h3 class="text-center"><b>{{ article.title }}</b></h3>
                 <article class="content">
-                    <h3>{{ article.title }}</h3>
                     <div class="body">
                         <blockquote>
                             {{ article.intro }}
                         </blockquote>
+                        &nbsp;
                         {{ article.content |safe }}
                     </div>
                 </article>

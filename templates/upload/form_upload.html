@@ -1,0 +1,30 @@
+{% extends'base.html' %}
+<!DOCTYPE html>
+<html>
+<body>
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="main col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-12">
+                <h2 class="text-center"><b>表单上传</b></h2>
+                <form action="" method="post" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="picname">图片名称</label>
+                        <input type="text" name="picname" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <!-- 前端的accept文件类型限制
+                             并不能提升上传安全性，只是用户体验的改进，
+                             因为前端限制可以被任意修改。
+                        -->
+                        <input type="file" name="file" class="form-control"
+                               multiple="multiple">
+                        <input type="submit" name="submit" value="上传" class="btn btn-primary">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+</body>
+</html>

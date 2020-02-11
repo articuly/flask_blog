@@ -1,0 +1,74 @@
+{% extends'base.html' %}
+<!DOCTYPE html>
+<html>
+<body>
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="main col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-12">
+                <h2 class="text-center"><b>XHR上传</b></h2>
+                <progress max="100" value=0 id="progress" style="width:100%"></progress>
+                <div class="alert alert-info" id="message" role="alert"></div>
+                <div id="image"></div>
+                <div class="form-group">
+                    <input type="file" name="file" id="file" class="form-control"
+                           multiple="multiple">
+                    <input type="button" name="btn" value="上传" class="btn btn-primary">
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        progress = document.getElementById("progress")
+        message = document.getElementById("message")
+        image = document.getElementById("image")
+        // querySelector只会选到第一个.btn，而模板新一个是在导航栏
+        btn = document.querySelector("input.btn")
+        console.log(progress, message, image, btn)
+        xhr = new XMLHttpRequest()
+
+        xhr.upload.onloadstart = function (ev) {
+            message.innerHTML = "开始上传"
+        }
+
+        xhr.upload.onprogress = function (ev) {
+            progress.value = ev.loaded / ev.total * 100
+        }
+
+        xhr.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                data = JSON.parse(this.responseText)
+                console.log(data)
+                // 上传成功返回一个上传文件存放路径列表
+                if (data.result == "success") {
+                    message.innerHTML = "上传成功"
+                    for (i in data.filepath_list) {
+                        img = document.createElement("img")
+                        img.src = data.filepath_list[i]
+                        image.appendChild(img)
+                    }
+                } else {
+                    message.innerHTML = "上传失败" + data.error
+                }
+            }
+        }
+
+        btn.onclick = function () {
+            // 第一张图片
+            //document.getElementById("file").files[0]
+            // 第二张图片
+            // document.getElementById("file").files[1]
+            files = document.getElementById("file").files
+            console.log(files)
+            data = new FormData()
+            for (i in files) {
+                data.append("file", files[i])
+            }
+            console.log(data)
+            xhr.open("post", "/upload/by_xhr")
+            xhr.send(data)
+        }
+    </script>
+{% endblock %}
+</body>
+</html>

@@ -84,7 +84,7 @@ def userList(page):
 @user_app.route('/delete/<int:user_id>')
 @login_required
 def deleteUser(user_id):
-    if user_id != 100:  # 防止admin被删除
+    if user_id != 1:  # 防止admin被删除
         user = User.query.get(user_id)
         db.session.delete(user)
         db.session.commit()

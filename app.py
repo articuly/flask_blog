@@ -5,17 +5,19 @@ from models import User, Category, Article
 from libs import db
 from views.users import user_app
 from views.articles import article_app
+from views.upload import upload_app
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///blog.db"  ## ///为相对路经，////为绝对路经
+app.config['ALLOW_UPLOAD_TYPE'] = ['image/jpeg', 'image/png', 'image/gif']
 app.secret_key = "123654"  # 生产环境要另外放置
 
 db.init_app(app)
 # 注册功能的蓝印
 app.register_blueprint(user_app, url_prefix="/user")
 app.register_blueprint(article_app, url_prefix='/article')
-
+app.register_blueprint(upload_app, url_prefix='/upload')
 
 @app.route('/<int:page>')
 @app.route('/', defaults={'page': 1})
