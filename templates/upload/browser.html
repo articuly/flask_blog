@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>浏览图片</title>
+    <link rel="stylesheet" href="/static/css/bootstrap.css">
+    <link rel="stylesheet" href="/static/css/bootstrap-theme.css">
+    <style>
+        ul {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        ul > li {
+            width: 25%;
+        }
+    </style>
+</head>
+<body>
+<div class="container-full">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-small-12 col-xs-12"></div>
+        <ul id="images">
+            {% for image in images %}
+                <li><img src="{{ image }}"
+                         alt=""
+                         class="img-responsive img-thumbnail"
+                         data-url="{{ image }}"
+                >
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+</div>
+<script>
+    funcNum = {{ request.args.get('CKEditorFuncNum') }}
+        ul = document.getElementById('images')
+    ul.onclick = function (ev) {
+        target = ev.target
+        console.log(target)
+        url = target.dataset.url
+        console.log(url)
+        window.opener.CKEDITOR.tools.callFunction(funcNum, url);
+        window.close()
+    }
+</script>
+</body>
+</html>
