@@ -1,0 +1,38 @@
+{% extends "admin/admin_base.html" %}
+<!DOCTYPE html>
+<html>
+<body>
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="main col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-12">
+                <h2 class="text-center"><b>添加分类</b></h2>
+                {% if message %}
+                    <div class="alert alert-info" role="alert">
+                        {{ message }}
+                    </div>
+                {% endif %}
+                <div class="body">
+                    <form action="" method="post">
+                        <div class="form-group">
+                            <label for="title">分类名称：</label>
+                            <input class="form-control" type="text" name="name" id="name" value=""/>
+                        </div>
+                        <div class="form-group">
+                            <label for="order">显示顺序：</label>
+                            <input class="form-control" type="text" name="order" id="order" value="0"/>
+                        </div>
+                        <div class="form-group">
+                            <input class="btn" type="submit" name="submit" id="btn1" value="添加"/>
+                            <input class="btn" type="reset" name="reset" id="btn2" value="重设"/>
+                        </div>
+                    </form>
+                </div>
+                <div class="row"></div>
+                <div class="row"></div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+</body>
+</html>

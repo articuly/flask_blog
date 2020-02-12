@@ -1,0 +1,83 @@
+{% extends "admin/admin_base.html" %}
+<!DOCTYPE html>
+<html>
+<body>
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="main col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-12">
+                <h2 class="text-center"><b>用户管理</b></h2>
+                <div class="panel">
+                    <form action="" method="post">
+                        <div class="form-group">
+                            <label for="q" class="control-label">关键字</label>
+                            <input type="text" name="q" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="field" class="control-label">查询字段</label>
+                            <select name="field" class="form-control">
+                                <option value="">查询字段</option>
+                                <option value="realname">真实名字</option>
+                                <option value="username">用户昵称</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="sex" class="control-label">性别</label>
+                            <select name="sex" class="form-control">
+                                <option value="" checked>查询性别</option>
+                                <option value="1">男</option>
+                                <option value="0">女</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="排序" class="control-label">排序</label>
+                            <select name="order" class="form-control">
+                                <option value="1" checked>按id升序排序</option>
+                                <option value="2">按id降序排序</option>
+                            </select>
+                        </div>
+                        <div class="form-group ">
+                            <div class="row"><input type="submit" name="search" class="btn btn-primary pull-right"
+                                                    value="立即搜索"></div>
+                        </div>
+                    </form>
+                </div>
+                <div class="row"><h4 class="text-center">总页数：{{ pages }} / 总记录：{{ total }}</h4></div>
+                <table class="table table-bordered ">
+                    <tr>
+                        <th>用户id</th>
+                        <th>用户名</th>
+                        <th>真实名</th>
+                        <th>性别</th>
+                        <th>城市</th>
+                        <th>操作</th>
+                    </tr>
+                    {% for user in users %}
+                        <tr>
+                            <td>{{ user.id }}</td>
+                            <td>{{ user.username }}</td>
+                            <td>{{ user.realname }}</td>
+                            <td>{{ user.sex }}</td>
+                            <td>{{ user.city }}</td>
+                            <td>
+                                <a href="{{ url_for("user_app.editUser", user_id=user.id) }}">修改</a>
+                                <a href="{{ url_for("user_app.deleteUser", user_id=user.id) }}">删除</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+                <ul class="pagination">
+                    {% for page in pageList %}
+                        {% if page!=None %}
+                            <li><a href="{{ url_for("user_app.userList", page=page) }}">{{ page }}</a></li>
+                        {% else %}
+                            <li><a href="#">...</a></li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+</body>
+</html>

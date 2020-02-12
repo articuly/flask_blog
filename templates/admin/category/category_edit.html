@@ -1,0 +1,33 @@
+{% extends "admin/admin_base.html" %}
+<!DOCTYPE html>
+<html>
+<body>
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="main col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-12">
+                <h2 class="text-center"><b>修改分类</b></h2>
+                <div class="body">
+                    <form action="" method="post">
+                        <div class="form-group">
+                            <label for="title">分类名称:</label>
+                            <input class="form-control" type="text" name="name" id="name"
+                                   value="{{ category.cate_name }}"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="order">显示顺序:</label>
+                            <input class="form-control" type="text" name="order" id="order"
+                                   value="{{ category.cate_order }}"/>
+                        </div>
+                        <div class="form-group">
+                            <input class="btn" type="submit" name="submit" id="btn1" value="修改"/>
+                            <input class="btn" type="reset" name="reset" id="btn2" value="重设"/>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+</body>
+</html>

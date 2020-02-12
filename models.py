@@ -22,6 +22,7 @@ class User(db.Model):
 
 
 class Article(db.Model):
+    # TODO admin func
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String)
     intro = db.Column(db.String)

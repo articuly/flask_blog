@@ -6,18 +6,19 @@ from libs import db
 from views.users import user_app
 from views.articles import article_app
 from views.upload import upload_app
+from settings import config
+from admin import admin_app
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
-app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///blog.db"  ## ///为相对路经，////为绝对路经
-app.config['ALLOW_UPLOAD_TYPE'] = ['image/jpeg', 'image/png', 'image/gif']
-app.secret_key = "123654"  # 生产环境要另外放置
+app.config.from_object(config['development'])
 
 db.init_app(app)
 # 注册功能的蓝印
+app.register_blueprint(upload_app, url_prefix='/upload')
+app.register_blueprint(admin_app, url_prefix='/admin')
 app.register_blueprint(user_app, url_prefix="/user")
 app.register_blueprint(article_app, url_prefix='/article')
-app.register_blueprint(upload_app, url_prefix='/upload')
+
 
 @app.route('/<int:page>')
 @app.route('/', defaults={'page': 1})
@@ -109,4 +110,6 @@ def test_session():
     return 'number=' + str(session['number'])
 
 
+# 添加render_as_batch=True  SQLite支持批处理修改
+# 但是这种如果修改多个字段，可能在发生错误时，发生修改不一致
 migrate = Migrate(app, db, render_as_batch=True)

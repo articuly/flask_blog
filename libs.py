@@ -5,6 +5,7 @@ from functools import wraps
 # 创建数据库对象，暂不导入app实例
 db = SQLAlchemy()
 
+# TODO more func
 
 def login_required(func):
     @wraps(func)
