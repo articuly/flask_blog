@@ -1,4 +1,4 @@
-{% extends'base.html' %}
+{% extends "member/member_base.html" %}
 <!DOCTYPE html>
 <html>
 <body>
@@ -36,7 +36,7 @@
             console.log(data)
 
             $.ajax({
-                url: "/upload/by_ajax",
+                url: "/member/upload",
                 type: "post",
                 data: data,
                 processData: false,

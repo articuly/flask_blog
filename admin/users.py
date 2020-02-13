@@ -2,47 +2,6 @@ from flask import request, redirect, url_for, render_template
 from libs import db
 from models import User
 from .admin_app import admin_app
-import json
-
-
-# 用户注册功能
-# TODO change position
-@admin_app.route('/register', methods=['get', 'post'])
-def register():
-    message = None
-    if request.method == 'POST':
-        if validate_username(request.form['username']):
-            return render_template('user/register.html', message='用户名重复')
-        realname = request.form['name']
-        username = request.form['username']
-        password = request.form['password']
-        sex = request.form['sex']
-        hobby = ', '.join(request.form.getlist('hobby'))
-        city = request.form['city']
-        intro = request.form['intro']
-        user = User(
-            realname=realname,
-            username=username,
-            password=password,
-            sex=sex,
-            hobby=hobby,
-            city=city,
-            intro=intro,
-        )
-        # 密码加码
-        user.hash_password(password)
-        try:
-            db.session.add(user)
-            db.session.commit()
-            return redirect(url_for('login'))
-        except Exception as e:
-            message = '注册失败' + str(e)
-    return render_template('user/register.html', message=message)
-
-
-# 验证是否存在同名用户
-def validate_username(username):
-    return User.query.filter_by(username=username).first()
 
 
 # 如果用户刚进入列表页是访问http://127.0.0.1/user/list与"/list/<int:page>"不匹配，提供一个默认带有page默认值的路由

@@ -1,0 +1,76 @@
+{% extends "admin/admin_base.html" %}
+<!DOCTYPE html>
+<html>
+<body>
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="main col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-12">
+                <h2 class="text-center"><b>jquery上传</b></h2>
+                <progress max="100" value=0 id="progress" style="width:100%"></progress>
+                <div class="alert alert-info" id="message" role="alert"></div>
+                <div id="image"></div>
+                <div class="form-group">
+                    <input type="file" name="file" id="file" class="form-control"
+                           multiple="multiple">
+                    <input type="button" name="btn" value="上传" class="btn btn-primary">
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/static/js/jquery-3.4.1.min.js"></script>
+    <script>
+        progress = $("#progress")
+        message = $("#message")
+        image = $("#image")
+        btn = $("input.btn")
+        console.log(progress, message, image, btn)
+
+        btn.on("click", function () {
+            files = document.getElementById("file").files
+            console.log(files)
+            data = new FormData()
+            for (i in files) {
+                data.append("file", files[i])
+            }
+            console.log(data)
+
+            $.ajax({
+                url: "/admin/by_ajax",
+                type: "post",
+                data: data,
+                processData: false,
+                contentType: false,
+                dataType: "json",
+                success: function (data) {
+                    if (data.result == "success") {
+                        message.html("上传成功")
+                        console.log(data.filepath_list)
+                        for (i in data.filepath_list) {
+                            img = $("<img />")
+                            img.attr("src", data.filepath_list[i])
+                            image.append(img)
+                        }
+                    } else {
+                        message.html("上传失败：" + data.error)
+                    }
+                },
+                xhr: function () {
+                    xhr = $.ajaxSettings.xhr()
+                    xhr.upload.onloadstart = function () {
+                        message.html("开始上传...")
+                    }
+                    xhr.upload.onprogress = function (e) {
+                        status = e.loaded / e.total * 100
+                        progress.val(status)
+                    }
+                    console.log(xhr)
+                    return xhr
+                }
+            })
+        })
+
+    </script>
+{% endblock %}
+</body>
+</html>

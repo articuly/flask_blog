@@ -66,11 +66,6 @@
                             </ul>
                         </li>
                     {% endif %}
-                    {% if username %}
-                        <li><a href="{{ url_for("user_app.userList") }}">用户管理</a></li>
-                        <li><a href="{{ url_for("article_app.list") }}">文章管理</a></li>
-                        <li><a href="{{ url_for("article_app.cateList") }}">分类管理</a></li>
-                    {% endif %}
                 </ul>
                 <form class="navbar-form navbar-left">
                     <div class="form-group">
@@ -84,10 +79,10 @@
                         <li><a href="{{ url_for("user_app.register") }}">注册</a></li>
                     {% else %}
                         {% if username=='admin' %}
-                            <li><a href="{{ url_for("admin_app.admin_index") }}">{{ username }}</a></li>
+                            <li><a href="{{ url_for("admin_app.admin_index") }}">{{ username }}管理后台</a></li>
                             <li><a href="{{ url_for("logout") }}">登出</a></li>
                         {% else %}
-                            <li><a href="#">{{ username }}</a></li>
+                            <li><a href="{{ url_for("member_app.member_index") }}">{{ username }}会员中心</a></li>
                             <li><a href="{{ url_for("logout") }}">登出</a></li>
                         {% endif %}
                     {% endif %}

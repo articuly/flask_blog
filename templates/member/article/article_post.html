@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "member/member_base.html" %}
 <!DOCTYPE html>
 <html>
 <body>
@@ -41,8 +41,8 @@
     </div>
     <script src="{{ url_for('static', filename="ckeditor/ckeditor.js") }}"></script>
     <script>CKEDITOR.replace('content', {
-        filebrowserUploadUrl: '/upload/ckeditor',
-        filebrowserBrowseUrl: '/upload/ckeditor/browser'
+        filebrowserUploadUrl: '/member/ckeditor',
+        filebrowserBrowseUrl: '/member/ckeditor/browser'
     })</script>
     <script>
         btn = document.getElementById("btn1")

@@ -1,4 +1,4 @@
-{% extends'base.html' %}
+{% extends "member/member_base.html" %}
 <!DOCTYPE html>
 <html>
 <body>
@@ -40,13 +40,62 @@
                         </div>
                         <div class="form-group">
                             <input class="btn" type="submit" name="submit" id="btn1" value="确认修改"/>
-                            <input class="btn" type="reset" name="reset" id="btn2" value="重设"/>
+                            <input class="btn" type="reset" name="reset_btn" id="btn2" value="重设"/>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
+    <script src="{{ url_for('static', filename="ckeditor/ckeditor.js") }}"></script>
+    <script>
+        CKEDITOR.replace('content')
+    </script>
+    {#    <script>CKEDITOR.replace('content', {#}
+    {#        filebrowserUploadUrl: '/upload/ckeditor',#}
+    {#        filebrowserBrowseUrl: '/upload/ckeditor/browser'#}
+    {#    })</script>#}
+    {#    <script>#}
+    {#        btn = document.getElementById("btn1")#}
+    {#        btn.onclick = function (event) {#}
+    {#            cate_id = $("#cate").val()#}
+    {#            title = $("#title").val()#}
+    {#            intro = $("#intro").val()#}
+    {#            content = CKEDITOR.instances['content'].getData()#}
+    {#            console.log(cate_id, title, intro, content)#}
+    {#            if (title == "") {#}
+    {#                $("#title").focus()#}
+    {#                return false#}
+    {#            }#}
+    {#            if (intro == "") {#}
+    {#                $("#intro").focus()#}
+    {#                return false#}
+    {#            }#}
+    {#            if (content == "") {#}
+    {#                CKEDITOR.instances["content"].focus()#}
+    {#                return false#}
+    {#            }#}
+    {#            $.ajax({#}
+    {#                type: "post",#}
+    {#                data: {#}
+    {#                    "cate": cate_id,#}
+    {#                    "title": title,#}
+    {#                    "intro": intro,#}
+    {#                    "content": content#}
+    {#                },#}
+    {#                dataType: "json",#}
+    {#                success: function (data) {#}
+    {#                    $("#message").html(data.message)#}
+    {#                    console.log(data.message)#}
+    {#                    //表单重置，相当于点击重设按钮#}
+    {#                    console.log('form is', $("#form1")[0])#}
+    {#                    $("#form1")[0].reset()#}
+    {#                    console.log('form is', $("#form1")[0])#}
+    {#                    CKEDITOR.instances["content"].setData()#}
+    {#                }#}
+    {#            })#}
+    {#        }#}
+    {#    </script>#}
 {% endblock %}
 </body>
 </html>

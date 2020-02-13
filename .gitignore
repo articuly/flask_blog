@@ -1,3 +1,6 @@
 /venv/
 /.idea/
 /static/uploads/
+__pycache__/settings.cpython-37.pyc
+admin/__pycache__/
+member/__pycache__/

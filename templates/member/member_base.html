@@ -4,7 +4,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>清心涟漪 - 管理后台</title>
+        <title>清心涟漪 - 会员中心</title>
         <link rel="stylesheet" type="text/css" href="{{ url_for("static", filename="css/bootstrap.css") }}"/>
         <link rel="stylesheet" type="text/css" href="{{ url_for("static", filename="css/bootstrap-theme.css") }}"/>
         <style type="text/css">
@@ -49,24 +49,26 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     <li><a href="/">返回首页</a></li>
-                    <li><a href="{{ url_for("admin_app.userList") }}">用户管理</a></li>
-                    <li><a href="{{ url_for("admin_app.article_list") }}">文章管理</a></li>
-                    <li><a href="{{ url_for("admin_app.cateList") }}">分类管理</a></li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-                           aria-haspopup="true"
-                           aria-expanded="false">上传管理 <span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a href="{{ url_for("admin_app.uploadByForm") }}">表单上传</a>
-                                <a href="{{ url_for("admin_app.uploadByXhr") }}">XHR上传</a>
-                                <a href="{{ url_for("admin_app.uploadByAjax") }}">jquery上传</a>
-                            </li>
-                        </ul>
-                    </li>
+                    {#                    {% if cates.total!=0 %}#}
+                    {#                        <li class="dropdown">#}
+                    {#                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"#}
+                    {#                               aria-haspopup="true"#}
+                    {#                               aria-expanded="false">文章分类 <span class="caret"></span></a>#}
+                    {#                            <ul class="dropdown-menu">#}
+                    {#                                {% for cate in cates %}#}
+                    {#                                    <li>#}
+                    {#                                        <a href="{{ url_for("article_app.getArticleList", cate_id=cate.cate_id, page=1) }}">{{ cate.cate_name }}</a>#}
+                    {#                                    </li>#}
+                    {#                                {% endfor %}#}
+                    {#                            </ul>#}
+                    {#                        </li>#}
+                    {#                    {% endif %}#}
+                    <li><a href="{{ url_for("member_app.article_list") }}">我的文章</a></li>
+                    <li><a href="{{ url_for("member_app.userEdit") }}">我的资料</a></li>
+                    <li><a href="{{ url_for("member_app.upload") }}">上传图片</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="{{ url_for("admin_app.admin_index") }}">{{ username }}管理后台</a></li>
+                    <li><a href="{{ url_for("member_app.member_index") }}">{{ username }}会员中心</a></li>
                     <li><a href="{{ url_for("logout") }}">登出</a></li>
                 </ul>
             </div>
@@ -75,7 +77,7 @@
 {% endblock %}
 
 {% block content %}
-    管理框架
+    会员后台中心
 {% endblock %}
 
 {% block footer %}

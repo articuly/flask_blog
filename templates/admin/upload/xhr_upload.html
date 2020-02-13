@@ -1,4 +1,4 @@
-{% extends'base.html' %}
+{% extends "admin/admin_base.html" %}
 <!DOCTYPE html>
 <html>
 <body>
@@ -65,7 +65,7 @@
                 data.append("file", files[i])
             }
             console.log(data)
-            xhr.open("post", "/upload/by_xhr")
+            xhr.open("post", "/admin/by_xhr")
             xhr.send(data)
         }
     </script>

@@ -4,22 +4,6 @@ from models import Article, Category
 from libs import db
 
 
-# 根据文章cate_id显示文章列表
-# TODO change position
-@admin_app.route('/cate/<int:cate_id>/<int:page>')
-@admin_app.route('/', defaults={'cate_id': 0, 'page': 1})
-def getArticleList(cate_id, page):
-    if cate_id == 0:
-        res = Article.query.paginate(page, 15)
-    else:
-        res = Article.query.filter_by(cate_id=cate_id).paginate(page, 15)
-    category = Category.query.get(cate_id)
-    articles = res.items
-    pageList = res.iter_pages()
-    return render_template('cate_articles.html', cate_id=cate_id, articles=articles, pageList=pageList,
-                           category=category)
-
-
 # 添加分类
 @admin_app.route('/category/add_cate', methods=['get', 'post'])
 def addCate():
