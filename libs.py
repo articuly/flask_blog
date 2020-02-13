@@ -1,9 +1,11 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask import session, redirect, url_for
 from functools import wraps
+from flask_ckeditor import CKEditor
 
 # 创建数据库对象，暂不导入app实例
 db = SQLAlchemy()
+ckeditor = CKEditor()
 
 # TODO more func
 

@@ -2,22 +2,26 @@ from flask import Flask, render_template
 from flask import request, redirect, url_for, session, make_response
 from flask_migrate import Migrate
 from models import User, Category, Article
-from libs import db
+from libs import db, ckeditor
+from settings import config
 from views.users import user_app
 from views.articles import article_app
-from settings import config
+from views.upload import upload_app
 from admin import admin_app
 from member import member_app
+from forms.account_form import LoginForm
 
 app = Flask(__name__)
 app.config.from_object(config['development'])
 
 db.init_app(app)
+ckeditor.init_app(app)
 # 注册功能的蓝印
 app.register_blueprint(admin_app, url_prefix='/admin')
 app.register_blueprint(member_app, url_prefix='/member')
 app.register_blueprint(user_app, url_prefix='/user')
 app.register_blueprint(article_app, url_prefix='/article')
+app.register_blueprint(upload_app, url_prefix="/upload")
 
 
 @app.route('/<int:page>')
@@ -36,6 +40,7 @@ def index():
 
 @app.route('/login', methods=['get', 'post'])
 def login():
+    form = LoginForm()
     message = None
     if request.method == 'POST':
         username = request.form['username']
@@ -49,7 +54,7 @@ def login():
         else:
             # 登录失败，给出提示
             message = '用户名与密码不匹配'
-    return render_template('login.html', message=message)
+    return render_template('login.html', message=message, form=form)
 
 
 @app.route('/logout')

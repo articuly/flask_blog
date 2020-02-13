@@ -5,32 +5,46 @@
 {% block content %}
     <div class="container-fluid">
         <div class="row">
-            <div class="main col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-12">
+            <form class="main col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-12">
                 <h2 class="text-center"><b>登陆</b></h2>
                 {% if message %}
                     <div class="alert alert-info" role="alert">
                         {{ message }}
                     </div>
                 {% endif %}
+                {#                <form action="" method="post" class="form-horizontal">#}
+                {#                    <div class="form-group">#}
+                {#                        <label for="username" class="control-label">用户名：</label>#}
+                {#                        <input type="text" class="form-control" name="username" id="username"#}
+                {#                               placeholder="请填写您的用户名">#}
+                {#                    </div>#}
+                {#                    <div class="form-group">#}
+                {#                        <label for="password" class="control-label">密码：</label>#}
+                {#                        <input type="password" class="form-control" name="password" id="password"#}
+                {#                               placeholder="请设置您的密码">#}
+                {#                    </div>#}
+                {#                    <div class="form-group">#}
+                {#                        <div class="text-right">#}
+                {#                            <input type="submit" class="btn btn-default" name="submit" id="btn1" value="立即登陆">#}
+                {#                        </div>#}
+                {#                    </div>#}
+                {#                </form>#}
                 <form action="" method="post" class="form-horizontal">
-                    <div class="form-group">
-                        <label for="username" class="control-label">用户名：</label>
-                        <input type="text" class="form-control" name="username" id="username"
-                               placeholder="请填写您的用户名">
-                    </div>
-                    <div class="form-group">
-                        <label for="password" class="control-label">密码：</label>
-                        <input type="password" class="form-control" name="password" id="password"
-                               placeholder="请设置您的密码">
-                    </div>
-                    <div class="form-group">
-                        <div class="text-right">
-                            <input type="submit" class="btn btn-default" name="submit" id="btn1" value="立即登陆">
-                        </div>
-                    </div>
+                    {% for field in form %}
+                        {% if field.widget.input_type!="hidden" %}
+                            <div class="form-group">
+                                {{ field.label(class="control-label") }}
+                                {{ field }}
+                            </div>
+                        {% else %}
+                            {{ field }}
+                        {% endif %}
+                    {% endfor %}
                 </form>
-            </div>
+
+
         </div>
+    </div>
     </div>
 {% endblock %}
 </body>
