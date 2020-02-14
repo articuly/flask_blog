@@ -5,7 +5,7 @@
 {% block content %}
     <div class="container-fluid">
         <div class="row">
-            <form class="main col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-12">
+            <div class="main col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-12">
                 <h2 class="text-center"><b>登陆</b></h2>
                 {% if message %}
                     <div class="alert alert-info" role="alert">
@@ -35,16 +35,22 @@
                             <div class="form-group">
                                 {{ field.label(class="control-label") }}
                                 {{ field }}
+                                {% if field.errors %}
+                                    <div class="alert alert-warning alert-dismissable" role="alert">
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="">&times;</span></button>
+                                        <strong>注意! </strong>
+                                        {{ field.errors }}
+                                    </div>
+                                {% endif %}
                             </div>
                         {% else %}
                             {{ field }}
                         {% endif %}
                     {% endfor %}
                 </form>
-
-
+            </div>
         </div>
-    </div>
     </div>
 {% endblock %}
 </body>

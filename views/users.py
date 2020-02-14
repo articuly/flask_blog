@@ -2,6 +2,7 @@ from flask import request, redirect, url_for, render_template
 from libs import db
 from models import User
 from flask import Blueprint
+from forms.account_form import RegisterForm
 
 user_app = Blueprint("user_app", __name__)
 
@@ -10,7 +11,8 @@ user_app = Blueprint("user_app", __name__)
 @user_app.route('/register', methods=['get', 'post'])
 def register():
     message = None
-    if request.method == 'POST':
+    form = RegisterForm()
+    if form.validate_on_submit():
         if validate_username(request.form['username']):
             return render_template('user/register.html', message='用户名重复')
         realname = request.form['name']
@@ -37,7 +39,9 @@ def register():
             return redirect(url_for('login'))
         except Exception as e:
             message = '注册失败' + str(e)
-    return render_template('user/register.html', message=message)
+    else:
+        print(form.errors)
+    return render_template('user/register.html', message=message, form=form)
 
 
 # 验证是否存在同名用户

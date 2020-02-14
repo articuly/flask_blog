@@ -6,8 +6,8 @@ class BaseConfig:
     # CKEDITOR配置
     CKEDITOR_WIDTH = "\"100%\""
     CKEDITOR_HEIGHT = "600"
-    CKEDITOR_FILE_UPLOADER = "upload.ckeditor_upload"
-    CKEDITOR_FILE_BROWSER = "upload.ckeditor_browser"
+    CKEDITOR_FILE_UPLOADER = "upload_app.ckeditor_upload"
+    CKEDITOR_FILE_BROWSER = "upload_app.ckeditor_browser"
 
 
 class DevelopmentConfig(BaseConfig):

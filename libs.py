@@ -2,12 +2,13 @@ from flask_sqlalchemy import SQLAlchemy
 from flask import session, redirect, url_for
 from functools import wraps
 from flask_ckeditor import CKEditor
+from flask_wtf.csrf import CSRFProtect
 
 # 创建数据库对象，暂不导入app实例
 db = SQLAlchemy()
 ckeditor = CKEditor()
+csrf = CSRFProtect()
 
-# TODO more func
 
 def login_required(func):
     @wraps(func)
