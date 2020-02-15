@@ -53,7 +53,7 @@
                         <th>操作</th>
                     </tr>
                     {% for user in users %}
-                        <tr>
+                        <tr id="user_{{ user.id }}" class="text-center">
                             <td>{{ user.id }}</td>
                             <td>{{ user.username }}</td>
                             <td>{{ user.realname }}</td>
@@ -61,7 +61,10 @@
                             <td>{{ user.city }}</td>
                             <td>
                                 <a href="{{ url_for("admin_app.editUser", user_id=user.id) }}">修改</a>
-                                <a href="{{ url_for("admin_app.deleteUser", user_id=user.id) }}">删除</a>
+                                {#                                <a href="{{ url_for("admin_app.deleteUser", user_id=user.id) }}">删除</a>#}
+                                {#                                <a href="#" onclick="delUser({{ user.id }})">删除</a>#}
+                                {#                                <!--直接在href中书写js，可以避免在href中写#发生页面跳动的现象-->#}
+                                <a href="javascript:delUser({{ user.id }})">删除</a>
                             </td>
                         </tr>
                     {% endfor %}
@@ -78,6 +81,29 @@
             </div>
         </div>
     </div>
+    <script>
+        function delUser(userid) {
+            $.ajax({
+                type: "post",
+                url: "{{ url_for("admin_app.deleteUser") }}",
+                data: {user_id: userid},
+                dataType: "json",
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token() }}")
+                },
+                success: function (data) {
+                    console.log(data)
+                    if (data.result == "success") {
+                        console.log($("#user_" + userid))
+                        $("#user_" + userid).html(
+                            "<td colspan=6>" + "删除成功" + "</td>")
+                    } else {
+                        alert('删除过程发生错误，请重新尝试')
+                    }
+                }
+            })
+        }
+    </script>
 {% endblock %}
 </body>
 </html>

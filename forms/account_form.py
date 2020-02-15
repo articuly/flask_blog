@@ -13,8 +13,7 @@ class CheckBoxField(SelectMultipleField):
 
 class LoginForm(FlaskForm):
     username = StringField('用户名', render_kw={'class': 'form-control', 'placeholder': 'enter your name'},
-                           validators=[DataRequired('必须填写用户名'),
-                                       Length(6, 20, message='用户名长度在6-20位之间')])
+                           validators=[DataRequired('必须填写用户名')])
     password = PasswordField('密码', render_kw={'class': 'form-control', 'placeholder': 'enter your password'},
                              validators=[DataRequired('必须填写密码'),
                                          Length(6, 20, message='密码长度在6-20位之间')])
@@ -65,8 +64,8 @@ class RegisterForm(FlaskForm):
                              render_kw={'class': 'form-control', 'placeholder': "设置一个密码，至少6个字符"})
     confirmpassword = PasswordField('确认密码：', validators=[EqualTo('password', message='两次输入密码不一样')],
                                     render_kw={'class': 'form-control', 'placeholder': "请确认您的密码"})
-    sex = RadioField('性别：', validators=[DataRequired('必须选择性别')],
-                     choices=[(1, '男'), (2, '女')])
+    sex = RadioField('性别：',
+                     choices=[("1", '男'), ("2", '女')])
     hobby = CheckBoxField('爱好：', choices=[('travel', '旅行'), ('reading', '阅读'), ('singing', '唱歌'), ('dancing', '跳舞'),
                                           ('writing', '写作'), ('swimming', '游泳'), ('playing basketball', '打篮球')],
                           render_kw={"class": "checkbox-inline"})

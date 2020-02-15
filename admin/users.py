@@ -1,8 +1,8 @@
 from flask import request, redirect, url_for, render_template
-from libs import db
+from libs import db, csrf
 from models import User
 from .admin_app import admin_app
-
+import json
 
 # 如果用户刚进入列表页是访问http://127.0.0.1/user/list与"/list/<int:page>"不匹配，提供一个默认带有page默认值的路由
 # 用户列表功能
@@ -39,15 +39,24 @@ def userList(page):
 
 
 # 根据用户id删除用户
-@admin_app.route('/user/delete/<int:user_id>')
-def deleteUser(user_id):
+@admin_app.route('/user/delete/', methods=['post'])
+def deleteUser():
+    csrf.protect()
+    user_id = int(request.form.get('user_id'))
+    print('调用csrf后删除用户', user_id)
+    message = {}
     if user_id != 1:  # 防止admin被删除
         user = User.query.get(user_id)
-        db.session.delete(user)
-        db.session.commit()
-        return redirect(url_for(".userList"))
+        try:
+            db.session.delete(user)
+            db.session.commit()
+        except:
+            message['result'] = 'fail'
+        else:
+            message['result'] = 'success'
     else:
-        return redirect(url_for(".userList"))
+        message['result'] = '不能删除管理员账号'
+    return json.dumps(message)
 
 
 # 用户信息修改
