@@ -28,7 +28,7 @@
 
         <div class="container-fluid">
             <div class="row">
-                <div class="col-md-5 col-md-offset-2 col-sm-5 col-sm-offset-1">
+                <div class="col-md-6 col-md-offset-1 col-sm-7 col-sm-offset-1">
                     <div class="alert alert-info" role="alert">公告：春节离线，有事电话联系</div>
                     <div class="jumbotron">
                         <h1>Hello, python!</h1>
@@ -36,14 +36,32 @@
                             Python是用来编写应用程序的高级编程语言，它“优雅”、“明确”、“简单”。Python就为我们提供了非常完善的基础代码库。人工智能、大数据、数据分析、网站项目等领域的开发编程都可使用Python完成。</p>
                         <p><a class="btn btn-primary btn-lg" href="#" role="button">立即报名学习</a></p>
                     </div>
-                    {% for article in articles %}
-                        <div class="list-group">
-                            <a href="{{ url_for('article_app.view', article_id=article.id) }}" class="list-group-item">
-                                <h4 class="list-group-item-heading">{{ article.title }}</h4>
-                                <p class="list-group-item-text">{{ article.intro }}</p>
-                            </a>
-                        </div>
-                    {% endfor %}
+                    {#                    {% for article in articles %}#}
+                    {#                        <div class="list-group">#}
+                    {#                            <a href="{{ url_for('article_app.view', article_id=article.id) }}" class="list-group-item">#}
+                    {#                                <h4 class="list-group-item-heading">{{ article.title }}</h4>#}
+                    {#                                <p class="list-group-item-text">{{ article.intro }}</p>#}
+                    {#                            </a>#}
+                    {#                        </div>#}
+                    {#                    {% endfor %}#}
+                    <ul class="media-list">
+                        {% for article in articles %}
+                            <li class="media">
+                                <div class="pull-left">
+                                    <img src="{{ url_for('static', filename='img/side/articuly.jpg') }}"
+                                         class="media-object">
+                                </div>
+                                <div class="media-body">
+                                    <h2 class="media-heading"><a
+                                            href="{{ url_for("article_app.view", article_id=article.id) }}">{{ article.title }}</a>
+                                    </h2>
+                                    <div class="media">
+                                        <p>{{ article['intro'] }}</p>
+                                    </div>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
                     <nav aria-label="Page navigation">
                         <ul class="pagination">
                             {% for page in pageList %}
@@ -66,7 +84,7 @@
                         </ul>
                     </nav>
                 </div>
-                <div class="col-md-3 col-sm-4">
+                <div class="col-md-4 col-sm-3">
                     <img src="{{ url_for('static', filename='img/side/articuly.jpg') }}" alt="清心涟漪" class="img-circle">
                     <img src="{{ url_for('static', filename='img/side/ad.jpg') }}" alt="" class="img-rounded">
                     <img src="{{ url_for('static', filename='img/side/rainbow.jpg') }}" alt="彩虹" class="img-circle">
@@ -107,7 +125,7 @@
                             <h3 class="panel-title">搜索博客：</h3>
                         </div>
                         <div class="panel-body">
-                            <form class="form-inline">
+                            <form class="form-inline" id="search2">
                                 <input type="text" class="form-control" placeholder="Python">
                                 <button type="submit" class="btn btn-default">搜索</button>
                             </form>

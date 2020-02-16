@@ -14,16 +14,26 @@
     <main>
         <div class="container-fluid">
             <div class="row">
-                <div class="col-md-5 col-md-offset-2 col-sm-5 col-sm-offset-1">
+                <div class="col-md-6 col-md-offset-1 col-sm-7 col-sm-offset-1">
                     <div class="alert alert-info" role="alert">公告：春节离线，有事电话联系</div>
-                    {% for article in articles %}
-                        <div class="list-group">
-                            <a href="{{ url_for('article_app.view', article_id=article.id) }}" class="list-group-item">
-                                <h4 class="list-group-item-heading">{{ article.title }}</h4>
-                                <p class="list-group-item-text">{{ article.intro }}</p>
-                            </a>
-                        </div>
-                    {% endfor %}
+                    <ul class="media-list">
+                        {% for article in articles %}
+                            <li class="media">
+                                <div class="pull-left">
+                                    <img src="{{ url_for('static', filename='img/side/articuly.jpg') }}"
+                                         class="media-object">
+                                </div>
+                                <div class="media-body">
+                                    <h2 class="media-heading"><a
+                                            href="{{ url_for("article_app.view", article_id=article.id) }}">{{ article.title }}</a>
+                                    </h2>
+                                    <div class="media">
+                                        <p>{{ article['intro'] }}</p>
+                                    </div>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
                     <nav aria-label="Page navigation">
                         <ul class="pagination">
                             {% for page in pageList %}
@@ -46,7 +56,7 @@
                         </ul>
                     </nav>
                 </div>
-                <div class="col-md-3 col-sm-4">
+                <div class="col-md-4 col-sm-3">
                     <img src="{{ url_for('static', filename='img/side/articuly.jpg') }}" alt="清心涟漪" class="img-circle">
                     <img src="{{ url_for('static', filename='img/side/ad.jpg') }}" alt="" class="img-rounded">
                     <img src="{{ url_for('static', filename='img/side/rainbow.jpg') }}" alt="彩虹" class="img-circle">

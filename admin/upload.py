@@ -11,7 +11,7 @@ def uploadByAjax():
         message = {'result': '', 'error': '', 'filepath_list': []}
         print(file_storage_list)
         print(request.content_length)  # 上传长度
-        if request.content_length > 102400 * 1024:
+        if request.content_length > 10240 * 1024:
             message['result'] = 'fail'
             message['error'] = '上传所有文件太大'
             return json.dumps(message)
@@ -64,7 +64,7 @@ def uploadByXhr():
         message = {'result': '', 'error': '', 'filepath_list': []}
         print(file_storage_list)
         print(request.content_length)  # 上传长度
-        if request.content_length > 102400 * 1024:
+        if request.content_length > 10240 * 1024:
             message['result'] = 'fail'
             message['error'] = '上传所有文件太大'
             return json.dumps(message)

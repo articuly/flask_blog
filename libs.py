@@ -3,11 +3,13 @@ from flask import session, redirect, url_for
 from functools import wraps
 from flask_ckeditor import CKEditor
 from flask_wtf.csrf import CSRFProtect
+from flask_dropzone import Dropzone
 
 # 创建数据库对象，暂不导入app实例
 db = SQLAlchemy()
 ckeditor = CKEditor()
 csrf = CSRFProtect()
+dropzone=Dropzone()
 
 
 def login_required(func):

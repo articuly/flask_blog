@@ -4,7 +4,7 @@ from libs import login_required
 
 admin_app = Blueprint('admin_app', __name__)
 
-
+# 请求会先执行is_admin()，只要访问admin_app就会检查
 @admin_app.before_request
 @login_required
 def is_admin():

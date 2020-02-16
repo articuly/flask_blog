@@ -2,7 +2,7 @@ from flask import Flask, render_template
 from flask import request, redirect, url_for, session, make_response
 from flask_migrate import Migrate
 from models import User, Category, Article
-from libs import db, ckeditor, csrf
+from libs import db, ckeditor, csrf, dropzone
 from settings import config
 from views.users import user_app
 from views.articles import article_app
@@ -14,9 +14,11 @@ from forms.account_form import LoginForm
 app = Flask(__name__)
 app.config.from_object(config['development'])
 
+# 初始化插件
 db.init_app(app)
 ckeditor.init_app(app)
 csrf.init_app(app)
+dropzone.init_app(app)
 # 注册功能的蓝印
 app.register_blueprint(admin_app, url_prefix='/admin')
 app.register_blueprint(member_app, url_prefix='/member')

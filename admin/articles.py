@@ -1,28 +1,38 @@
-from flask import request, redirect, url_for, render_template, session
+from flask import request, redirect, url_for, render_template, session, jsonify
 from libs import db
 from models import Article
 from .admin_app import admin_app
+from forms.article_form import ArticleForm
 
 
 @admin_app.route("/article/post", methods=['get', 'post'])
 def article_post():
+    # form = ArticleForm()
+    # print(form)
     if request.method == "POST":
+    # if form.validate_on_submit():
         cate_id = request.form['cate']
         title = request.form['title']
+        thumb = request.form['thumb']
         intro = request.form['intro']
         content = request.form['content']
         article = Article(
             cate_id=cate_id,
             title=title,
+            thumb=thumb,
             intro=intro,
             content=content,
             author=session['user']
         )
-        db.session.add(article)
-        db.session.commit()
-        import json
-        message = {"message": "文章发布成功"}
-        return json.dumps(message)
+        try:
+            db.session.add(article)
+            db.session.commit()
+        except Exception as e:
+            print(str(e))
+            message = {'message': '发布失败'}
+        else:
+            message = {'message': '发布成功'}
+        return jsonify(message)
     return render_template("admin/article/article_post.html")
 
 
