@@ -1,6 +1,11 @@
 {% extends "admin/admin_base.html" %}
 <!DOCTYPE html>
 <html>
+{% block style %}
+    input[name="hobby"]{
+    margin-right: 20px;
+    }
+{% endblock %}
 <body>
 {% block content %}
     <div class="container-fluid">
@@ -8,117 +13,174 @@
             <div class="main col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-12">
                 <h2 class="text-center"><b>用户信息修改</b></h2>
                 <div class="body">
-                    <form action="" method="post">
-                        <div class="form-group">
-                            <label for="name">姓名:</label>
-                            <input class="form-control" type="text" name="name" id="name" value="{{ user.realname }}"/>
-                        </div>
-                        <div class="form-group">
-                            <label for="username">用户名:</label>
-                            <input class="form-control" type="text" name="username" id="username"
-                                   value="{{ user.username }}"/>
-                        </div>
-                        <div class="form-group">
-                            <label for="sex">性别：</label>
-                            <label class="radio-inline">
-                                <input type="radio" name="sex" id="sex1" value="0"
-                                        {% if user.sex==0 %} checked {% endif %}
-                                />女
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="sex" id="sex2" value="1"
-                                        {% if user.sex==1 %} checked {% endif %}
-                                />男
-                            </label>
-                        </div>
-                        <div class="form-group">
-                            <label for="hobby">爱好：</label>
-                            <label class="checkbox-inline">
-                                <input type="checkbox" name="hobby" id="hobby1"
-                                        {% if user.hobby.find("travel")!=-1 %} checked {% endif %}
-                                       value="travel"/>旅行
-                            </label>
-                            <label class="checkbox-inline">
-                                <input type="checkbox" name="hobby" id="hobby2"
-                                        {% if user.hobby.find("reading")!=-1 %} checked {% endif %}
-                                       value="reading"/>阅读
-                            </label>
-                            <label class="checkbox-inline">
-                                <input type="checkbox" name="hobby" id="hobby3"
-                                        {% if user.hobby.find("singing")!=-1 %} checked {% endif %}
-                                       value="singing"/>唱歌
-                            </label>
-                            <label class="checkbox-inline">
-                                <input type="checkbox" name="hobby" id="hobby4"
-                                        {% if user.hobby.find("dancing")!=-1 %} checked {% endif %}
-                                       value="dancing"/>跳舞
-                            </label>
-                            <label class="checkbox-inline">
-                                <input type="checkbox" name="hobby" id="hobby5"
-                                        {% if user.hobby.find("writing")!=-1 %} checked {% endif %}
-                                       value="writing"/>写作
-                            </label>
-                            <label class="checkbox-inline">
-                                <input type="checkbox" name="hobby" id="hobby6"
-                                        {% if user.hobby.find("swimming")!=-1 %} checked {% endif %}
-                                       value="swimming"/>游泳
-                            </label>
-                            <label class="checkbox-inline">
-                                <input type="checkbox" name="hobby" id="hobby7"
-                                        {% if user.hobby.find("playing basketball")!=-1 %} checked {% endif %}
-                                       value="playing basketball"/>打篮球
-                            </label>
-                        </div>
-                        <div class="form-group">
-                            <label for="city">所在城市：</label>
-                            <select name="city">
-                                <option value="">请选择城市</option>
-                                <option value="010"
-                                        {% if user.city=="010" %} selected {% endif %}
-                                >北京
-                                </option>
-                                <option value="021"
-                                        {% if user.city=="021" %} selected {% endif %}
-                                >上海
-                                </option>
-                                <option value="020"
-                                        {% if user.city=="020" %} selected {% endif %}
-                                >广州
-                                </option>
-                                <option value="0755"
-                                        {% if user.city=="0755" %} selected {% endif %}
-                                >深圳
-                                </option>
-                                <option value="0571"
-                                        {% if user.city=="0571" %} selected {% endif %}
-                                >杭州
-                                </option>
-                                <option value="023"
-                                        {% if user.city=="023" %} selected {% endif %}
-                                >重庆
-                                </option>
-                                <option value="0512"
-                                        {% if user.city=="0512" %} selected {% endif %}
-                                >苏州
-                                </option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="intro">简介：</label>
-                            <textarea name="intro" rows="5" cols="10" class="form-control">
-								{{ user.intro }}
-							</textarea>
-                        </div>
-                        <div class="form-group">
-                            <input class="btn" type="submit" name="submit" id="btn1" value="修改信息"/>
-                            <input class="btn" type="reset" name="reset" id="btn2" value="重设"/>
-                        </div>
-                    </form>
+                    <div class="alert alert-info" id="message" role="alert"></div>
+                    {#                                        <form action="" method="post">#}
+                    {#                        <div class="form-group">#}
+                    {#                            <label for="name">姓名:</label>#}
+                    {#                            <input class="form-control" type="text" name="name" id="name" value="{{ user.realname }}"/>#}
+                    {#                        </div>#}
+                    {#                        <div class="form-group">#}
+                    {#                            <label for="username">用户名:</label>#}
+                    {#                            <input class="form-control" type="text" name="username" id="username"#}
+                    {#                                   value="{{ user.username }}"/>#}
+                    {#                        </div>#}
+                    {#                        <div class="form-group">#}
+                    {#                            <label for="sex">性别：</label>#}
+                    {#                            <label class="radio-inline">#}
+                    {#                                <input type="radio" name="sex" id="sex1" value="0"#}
+                    {#                                        {% if user.sex==0 %} checked {% endif %}#}
+                    {#                                />女#}
+                    {#                            </label>#}
+                    {#                            <label class="radio-inline">#}
+                    {#                                <input type="radio" name="sex" id="sex2" value="1"#}
+                    {#                                        {% if user.sex==1 %} checked {% endif %}#}
+                    {#                                />男#}
+                    {#                            </label>#}
+                    {#                        </div>#}
+                    {#                        <div class="form-group">#}
+                    {#                            <label for="hobby">爱好：</label>#}
+                    {#                            <label class="checkbox-inline">#}
+                    {#                                <input type="checkbox" name="hobby" id="hobby1"#}
+                    {#                                        {% if user.hobby.find("travel")!=-1 %} checked {% endif %}#}
+                    {#                                       value="travel"/>旅行#}
+                    {#                            </label>#}
+                    {#                            <label class="checkbox-inline">#}
+                    {#                                <input type="checkbox" name="hobby" id="hobby2"#}
+                    {#                                        {% if user.hobby.find("reading")!=-1 %} checked {% endif %}#}
+                    {#                                       value="reading"/>阅读#}
+                    {#                            </label>#}
+                    {#                            <label class="checkbox-inline">#}
+                    {#                                <input type="checkbox" name="hobby" id="hobby3"#}
+                    {#                                        {% if user.hobby.find("singing")!=-1 %} checked {% endif %}#}
+                    {#                                       value="singing"/>唱歌#}
+                    {#                            </label>#}
+                    {#                            <label class="checkbox-inline">#}
+                    {#                                <input type="checkbox" name="hobby" id="hobby4"#}
+                    {#                                        {% if user.hobby.find("dancing")!=-1 %} checked {% endif %}#}
+                    {#                                       value="dancing"/>跳舞#}
+                    {#                            </label>#}
+                    {#                            <label class="checkbox-inline">#}
+                    {#                                <input type="checkbox" name="hobby" id="hobby5"#}
+                    {#                                        {% if user.hobby.find("writing")!=-1 %} checked {% endif %}#}
+                    {#                                       value="writing"/>写作#}
+                    {#                            </label>#}
+                    {#                            <label class="checkbox-inline">#}
+                    {#                                <input type="checkbox" name="hobby" id="hobby6"#}
+                    {#                                        {% if user.hobby.find("swimming")!=-1 %} checked {% endif %}#}
+                    {#                                       value="swimming"/>游泳#}
+                    {#                            </label>#}
+                    {#                            <label class="checkbox-inline">#}
+                    {#                                <input type="checkbox" name="hobby" id="hobby7"#}
+                    {#                                        {% if user.hobby.find("playing basketball")!=-1 %} checked {% endif %}#}
+                    {#                                       value="playing basketball"/>打篮球#}
+                    {#                            </label>#}
+                    {#                        </div>#}
+                    {#                        <div class="form-group">#}
+                    {#                            <label for="city">所在城市：</label>#}
+                    {#                            <select name="city">#}
+                    {#                                <option value="">请选择城市</option>#}
+                    {#                                <option value="010"#}
+                    {#                                        {% if user.city=="010" %} selected {% endif %}#}
+                    {#                                >北京#}
+                    {#                                </option>#}
+                    {#                                <option value="021"#}
+                    {#                                        {% if user.city=="021" %} selected {% endif %}#}
+                    {#                                >上海#}
+                    {#                                </option>#}
+                    {#                                <option value="020"#}
+                    {#                                        {% if user.city=="020" %} selected {% endif %}#}
+                    {#                                >广州#}
+                    {#                                </option>#}
+                    {#                                <option value="0755"#}
+                    {#                                        {% if user.city=="0755" %} selected {% endif %}#}
+                    {#                                >深圳#}
+                    {#                                </option>#}
+                    {#                                <option value="0571"#}
+                    {#                                        {% if user.city=="0571" %} selected {% endif %}#}
+                    {#                                >杭州#}
+                    {#                                </option>#}
+                    {#                                <option value="023"#}
+                    {#                                        {% if user.city=="023" %} selected {% endif %}#}
+                    {#                                >重庆#}
+                    {#                                </option>#}
+                    {#                                <option value="0512"#}
+                    {#                                        {% if user.city=="0512" %} selected {% endif %}#}
+                    {#                                >苏州#}
+                    {#                                </option>#}
+                    {#                            </select>#}
+                    {#                        </div>#}
+                    {#                        <div class="form-group">#}
+                    {#                            <label for="intro">简介：</label>#}
+                    {#                            <textarea name="intro" rows="5" cols="10" class="form-control">#}
+                    {#								{{ user.intro }}#}
+                    {#							</textarea>#}
+                    {#                        </div>#}
+                    {% for field in form %}
+                        {% if field.widget.input_type!="hidden" %}
+                            <div class="form-group">
+                                {{ field.label }}
+                                {{ field }}
+                            </div>
+                        {% else %}
+                            {{ field }}
+                        {% endif %}
+                    {% endfor %}
+                    <div class="form-group">
+                        <input class="btn" type="button" name="submit" id="btn1" value="修改信息"/>
+                        <input class="btn" type="button" name="closeTab" onclick="closeTab()" id="btn2" value="直接关闭"/>
+                    </div>
+                    {#                                        </form>#}
                 </div>
-
             </div>
         </div>
     </div>
+    <script>
+        function closeTab() {
+            window.close()
+        }
+
+        window.onload = function () {
+            $("#btn1").on("click", function () {
+                console.log('click it')
+                name = $("#name").val()
+                sex = $("[name=sex]:checked").val()
+                hobby = []
+                $("[name=hobby]:checked").each(
+                    function (index, item) {
+                        hobby.push($(item).val())
+                    }
+                )
+                city = $("[name=city]").val()
+                intro = $("[name=intro]").val()
+                data = {
+                    name: name,
+                    sex: sex,
+                    hobby: hobby,
+                    city: city,
+                    intro: intro
+                }
+                console.log(data)
+                $.ajax({
+                    type: "post",
+                    url: '{{ url_for("admin_app.editUser", user_id=user_id) }}',
+                    data: data,
+                    dataType: "json",
+                    beforeSend: function (xhr) {
+                        console.log('xhr');
+                        xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token() }}')
+                    },
+                    success: function (data) {
+                        console.log('success')
+                        if (data.result == "success") {
+                            $("#message").html("修改成功<a href='javascript:window.close()'>关闭</a>")
+                        }
+                    }
+                })
+            })
+        }
+
+
+    </script>
 {% endblock %}
 </body>
 </html>

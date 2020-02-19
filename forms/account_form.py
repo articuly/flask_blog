@@ -85,3 +85,41 @@ class RegisterForm(FlaskForm):
         print('内联验证调用')
         if field.data.find("artic") != -1:
             raise ValidationError("不能包含敏感字")
+
+
+# 用户信息修改表单
+# 有些注册信息是不允许修改的，比如用户名
+# 有些信息只能管理员修改，比如会员等级，状态
+class AdminEditInfoForm(FlaskForm):
+    name = StringField('姓名：',
+                       validators=[DataRequired('真实姓名必填'), BadWords(['admin', 'articuly', '客户服务'], message='不能包括敏感词')],
+                       render_kw={'class': 'form-control', 'placeholder': "请填写您的真实姓名"})
+    sex = RadioField('性别：', coerce=int,
+                     choices=[(1, '男'), (2, '女')])
+    hobby = CheckBoxField('爱好：', choices=[('travel', '旅行'), ('reading', '阅读'), ('singing', '唱歌'), ('dancing', '跳舞'),
+                                          ('writing', '写作'), ('swimming', '游泳'), ('playing basketball', '打篮球')],
+                          render_kw={"class": "checkbox-inline"})
+    city = SelectField('城市：', validators=[DataRequired('必须所有城市')],
+                       choices=[('', '请选择城市'), ('010', '北京'), ('021', '上海'), ('020', '广州'), ('0755', '深圳'),
+                                ('0571', '杭州'), ('023', '重庆'), ('0512', '苏州')],
+                       render_kw={'class': 'form-control'})
+    intro = TextAreaField('简介:', render_kw={'class': 'form-control'})
+
+
+# 管理员的用户信息修改表单
+# 管理员通常可以修改用户一些不能修改的信息，而且没有限制
+# 可以修改的信息并不一定是用户注册的信息，比如用户等级
+class EditInfoForm(FlaskForm):
+    name = StringField('姓名：',
+                       validators=[DataRequired('真实姓名必填')],
+                       render_kw={'class': 'form-control', 'placeholder': "请填写您的真实姓名"})
+    sex = RadioField('性别：', coerce=int,
+                     choices=[(1, '男'), (2, '女')])
+    hobby = CheckBoxField('爱好：', choices=[('travel', '旅行'), ('reading', '阅读'), ('singing', '唱歌'), ('dancing', '跳舞'),
+                                          ('writing', '写作'), ('swimming', '游泳'), ('playing basketball', '打篮球')],
+                          render_kw={"class": "checkbox-inline"})
+    city = SelectField('城市：', validators=[DataRequired('必须所有城市')],
+                       choices=[('', '请选择城市'), ('010', '北京'), ('021', '上海'), ('020', '广州'), ('0755', '深圳'),
+                                ('0571', '杭州'), ('023', '重庆'), ('0512', '苏州')],
+                       render_kw={'class': 'form-control'})
+    intro = TextAreaField('简介:', render_kw={'class': 'form-control'})

@@ -1,8 +1,10 @@
-from flask import request, redirect, url_for, render_template
+from flask import request, redirect, url_for, render_template, jsonify
 from libs import db, csrf
 from models import User
 from .admin_app import admin_app
 import json
+from forms.account_form import AdminEditInfoForm
+
 
 # 如果用户刚进入列表页是访问http://127.0.0.1/user/list与"/list/<int:page>"不匹配，提供一个默认带有page默认值的路由
 # 用户列表功能
@@ -62,14 +64,30 @@ def deleteUser():
 # 用户信息修改
 @admin_app.route("/user/edit/<int:user_id>", methods=['get', 'post'])
 def editUser(user_id):
-    user = User.query.get(user_id)
-    if request.method == "POST":
-        user.username = request.form['username']
-        user.realname = request.form['name']
-        user.sex = request.form['sex']
-        user.hobby = ', '.join(request.form.getlist('hobby'))
-        user.city = request.form['city']
-        user.intro = request.form['intro']
-        db.session.commit()
-        return redirect(url_for(".userList"))
-    return render_template("admin/user/user_edit.html", user=user)
+    form = AdminEditInfoForm()
+    user = User.query.get_or_404(user_id)
+    print('form data is in')
+    if form.validate_on_submit():
+        message = {'result': 'fail'}
+        user.realname = form.data['name']
+        user.sex = form.data['sex']
+        user.hobby = ', '.join(form.data['hobby'])
+        user.city = form.data['city']
+        user.intro = form.data['intro']
+        try:
+            db.session.commit()
+            print('准备提交')
+        except Exception as e:
+            print(str(e))
+        else:
+            message['result'] = 'success'
+        return jsonify(message)
+    elif form.errors:
+        print(form.errors)
+    else:
+        form.name.data = user.realname
+        form.sex.data = user.sex
+        form.hobby.data = user.hobby.split(', ')
+        form.city.data = user.city
+        form.intro.data = user.intro
+    return render_template("admin/user/user_edit.html", user_id=user_id, form=form)

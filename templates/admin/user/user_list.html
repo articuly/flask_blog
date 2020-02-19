@@ -60,7 +60,7 @@
                             <td>{{ user.sex }}</td>
                             <td>{{ user.city }}</td>
                             <td>
-                                <a href="{{ url_for("admin_app.editUser", user_id=user.id) }}">修改</a>
+                                <a href="{{ url_for("admin_app.editUser", user_id=user.id) }}" target="_blank">修改</a>
                                 {# <a href="{{ url_for("admin_app.deleteUser", user_id=user.id) }}">删除</a>#}
                                 {# <a href="#" onclick="delUser({{ user.id }})">删除</a>#}
                                 {# <!--直接在href中书写js，可以避免在href中写#发生页面跳动的现象-->#}
