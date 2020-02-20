@@ -1,20 +1,24 @@
 from flask import request, redirect, url_for, render_template, session
 from libs import db
-from models import Article
+from models import Article, Category
 from .member_app import member_app
 import json
+from forms.article_form import ArticleForm, ArticleSearchForm
 
 
 @member_app.route("/article/post", methods=['get', 'post'])
 def article_post():
-    if request.method == "POST":
-        cate_id = request.form['cate']
-        title = request.form['title']
-        intro = request.form['intro']
-        content = request.form['content']
+    form = set_article_form()
+    if form.validate_on_submit():
+        cate_id = form.data['cate']
+        title = form.data['title']
+        thumb = form.data['thumb']
+        intro = form.data['intro']
+        content = form.data['content']
         article = Article(
             cate_id=cate_id,
             title=title,
+            thumb=thumb,
             intro=intro,
             content=content,
             author=session['user']
@@ -67,6 +71,7 @@ def article_delete(article_id):
 # 文章修改
 @member_app.route('/article/edit/<int:article_id>', methods=['get', 'post'])
 def article_edit(article_id):
+    form = set_article_form()
     article = Article.query.get(article_id)
     if not article:
         return redirect(url_for('.article_list'))
@@ -80,4 +85,10 @@ def article_edit(article_id):
             db.session.add(article)
             db.session.commit()
             return redirect(url_for('.article_list'))
-    return render_template('member/article/article_edit.html', article=article)
+    return render_template('member/article/article_edit.html', article=article, form=form)
+
+
+def set_article_form():
+    form = ArticleForm()
+    form.cate.choices = [(row.cate_id, row.cate_name) for row in Category.query.all()]
+    return form

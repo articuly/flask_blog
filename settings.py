@@ -7,6 +7,7 @@ class BaseConfig:
     # CKEDITOR配置
     CKEDITOR_WIDTH = "\"100%\""
     CKEDITOR_HEIGHT = "600"
+    CKEDITOR_LANGUAGE = 'zh-cn'
     CKEDITOR_FILE_UPLOADER = "upload_app.ckeditor_upload"
     CKEDITOR_FILE_BROWSER = "upload_app.ckeditor_browser"
 
@@ -18,6 +19,7 @@ class BaseConfig:
     DROPZONE_ALLOWED_FILE_TYPE = "image/*, .ico, .webp"
     DROPZONE_ENABLE_CSRF = True
     DROPZONE_INPUT_NAME = "upload"
+    DROPZONE_DEFAULT_MESSAGE = '点击或拖拽文件到这里上传'
 
 
 class DevelopmentConfig(BaseConfig):

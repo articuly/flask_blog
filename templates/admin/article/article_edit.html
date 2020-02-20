@@ -3,99 +3,139 @@
 <html>
 <body>
 {% block content %}
+    {{ dropzone.load_css() }}
+    {{ dropzone.style('border: 2px dashed #0087F7; margin: 2%') }}
+    {{ dropzone.load_js() }}
     <div class="container-fluid">
         <div class="row">
             <div class="main col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-12">
                 <h2 class="text-center"><b>修改文章</b></h2>
                 <div class="body">
-                    <form action="" method="post">
-                        <div class="form-group">
-                            <label for="cate">文章分类:</label>
-                            <select name="cate" id="cate" class="form-control">
-                                {% for cate in cates %}
-                                    <option value="{{ cate.cate_id }}"
-                                            {% if article.cate_id == cate.cate_id %}
-                                            selected
-                                            {% endif %}
-                                    >{{ cate.cate_name }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="name">标题：</label>
-                            <input class="form-control" type="text" name="title" id="title"
-                                   value="{{ article.title }}"/>
-                        </div>
-                        <div class="form-group">
-                            <label for="intro">摘要：</label>
-                            <textarea name="intro" rows="3" cols="10" class="form-control">
-                                    {{- article.intro -}}
-                                </textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="content">正文：</label>
-                            <textarea name="content" rows="15" cols="10" class="form-control">
-                                    {{- article.content -}}
-                                </textarea>
-                        </div>
-                        <div class="form-group">
-                            <input class="btn" type="submit" name="submit" id="btn1" value="确认修改"/>
-                            <input class="btn" type="reset" name="reset_btn" id="btn2" value="重设"/>
-                        </div>
-                    </form>
+                    <div class="alert alert-info" id="message" role="alert"></div>
+                    {% for field in form %}
+                        {% if field.widget.input_type!="hidden" %}
+                            <div class="form-group">
+                                {{ field.label }}
+                                {{ field }}
+                            </div>
+                        {% else %}
+                            {{ field }}
+                            {% if field.name=="thumb" %}
+                                {{ dropzone.create(action="upload_app.ckeditor_upload") }}
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                    <div class="form-group">
+                        <input class="btn" type="button" name="btn" id="btn1" value="发表文章"/>
+                        <input class="btn" type="reset" name="reset_btn" id="btn2" value="重设"/>
+                    </div>
+                    {#                    <form action="" method="post">#}
+                    {#                        <div class="form-group">#}
+                    {#                            <label for="cate">文章分类:</label>#}
+                    {#                            <select name="cate" id="cate" class="form-control">#}
+                    {#                                {% for cate in cates %}#}
+                    {#                                    <option value="{{ cate.cate_id }}"#}
+                    {#                                            {% if article.cate_id == cate.cate_id %}#}
+                    {#                                            selected#}
+                    {#                                            {% endif %}#}
+                    {#                                    >{{ cate.cate_name }}</option>#}
+                    {#                                {% endfor %}#}
+                    {#                            </select>#}
+                    {#                        </div>#}
+                    {#                        <div class="form-group">#}
+                    {#                            <label for="name">标题：</label>#}
+                    {#                            <input class="form-control" type="text" name="title" id="title"#}
+                    {#                                   value="{{ article.title }}"/>#}
+                    {#                        </div>#}
+                    {#                        <div class="form-group">#}
+                    {#                            <label for="intro">摘要：</label>#}
+                    {#                            <textarea name="intro" rows="3" cols="10" class="form-control">#}
+                    {#                                    {{- article.intro -}}#}
+                    {#                                </textarea>#}
+                    {#                        </div>#}
+                    {#                        <div class="form-group">#}
+                    {#                            <label for="content">正文：</label>#}
+                    {#                            <textarea name="content" rows="15" cols="10" class="form-control">#}
+                    {#                                    {{- article.content -}}#}
+                    {#                                </textarea>#}
+                    {#                        </div>#}
+                    {#                        <div class="form-group">#}
+                    {#                            <input class="btn" type="submit" name="submit" id="btn1" value="确认修改"/>#}
+                    {#                            <input class="btn" type="reset" name="reset_btn" id="btn2" value="重设"/>#}
+                    {#                        </div>#}
+                    {#                    </form>#}
                 </div>
             </div>
         </div>
     </div>
+    {{ dropzone.config(
+                        custom_init='this.on("success", function(file, res) {
+                        if( file.xhr.status == 200 ){
+                           res = JSON.parse(res)
+                           $("#thumb").val(res.url);
+                           console.log($("#thumb"));
+                           console.log(res);
+                           console.log(typeof(res))
+                        }else{
+                            alert("上传失败");
+                        }
+                         });'
+                    ) }}
     <script src="{{ url_for('static', filename="ckeditor/ckeditor.js") }}"></script>
     <script>
-        CKEDITOR.replace('content')
+        CKEDITOR.replace('content', {
+            filebrowserUploadUrl: '/upload/ckeditor',
+            filebrowserBrowseUrl: '/upload/ckeditor/browser',
+            //CSRF启用后，需要按照CSRF要求传递CSRF_TOKEN
+            fileTools_requestHeaders: {
+                "X-Requested-width": "XMLHttpRequest",
+                "X-CSRF-Token": "{{ csrf_token() }}"
+            }
+        })
     </script>
-    {#    <script>CKEDITOR.replace('content', {#}
-    {#        filebrowserUploadUrl: '/upload/ckeditor',#}
-    {#        filebrowserBrowseUrl: '/upload/ckeditor/browser'#}
-    {#    })</script>#}
-    {#    <script>#}
-    {#        btn = document.getElementById("btn1")#}
-    {#        btn.onclick = function (event) {#}
-    {#            cate_id = $("#cate").val()#}
-    {#            title = $("#title").val()#}
-    {#            intro = $("#intro").val()#}
-    {#            content = CKEDITOR.instances['content'].getData()#}
-    {#            console.log(cate_id, title, intro, content)#}
-    {#            if (title == "") {#}
-    {#                $("#title").focus()#}
-    {#                return false#}
-    {#            }#}
-    {#            if (intro == "") {#}
-    {#                $("#intro").focus()#}
-    {#                return false#}
-    {#            }#}
-    {#            if (content == "") {#}
-    {#                CKEDITOR.instances["content"].focus()#}
-    {#                return false#}
-    {#            }#}
-    {#            $.ajax({#}
-    {#                type: "post",#}
-    {#                data: {#}
-    {#                    "cate": cate_id,#}
-    {#                    "title": title,#}
-    {#                    "intro": intro,#}
-    {#                    "content": content#}
-    {#                },#}
-    {#                dataType: "json",#}
-    {#                success: function (data) {#}
-    {#                    $("#message").html(data.message)#}
-    {#                    console.log(data.message)#}
-    {#                    //表单重置，相当于点击重设按钮#}
-    {#                    console.log('form is', $("#form1")[0])#}
-    {#                    $("#form1")[0].reset()#}
-    {#                    console.log('form is', $("#form1")[0])#}
-    {#                    CKEDITOR.instances["content"].setData()#}
-    {#                }#}
-    {#            })#}
-    {#        }#}
-    {#    </script>#}
+    <script>
+        btn = document.getElementById("btn1")
+        btn.onclick = function (event) {
+            cate_id = $("#cate").val()
+            title = $("#title").val()
+            thumb = $("#thumb").val()
+            intro = $("#intro").val()
+            content = CKEDITOR.instances['content'].getData()
+            console.log(cate_id, title, intro, content)
+            if (title == "") {
+                $("#title").focus()
+                return false
+            }
+            if (intro == "") {
+                $("#intro").focus()
+                return false
+            }
+            if (content == "") {
+                CKEDITOR.instances["content"].focus()
+                return false
+            }
+            $.ajax({
+                type: "post",
+                data: {
+                    "cate": cate_id,
+                    "title": title,
+                    "thumb": thumb,
+                    "intro": intro,
+                    "content": content
+                },
+                dataType: "json",
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token() }}")
+                },
+                success: function (data) {
+                    console.log('success')
+                    if (data.result == "success") {
+                        $("#message").html("修改成功<a href='javascript:window.close()'> 关闭</a>")
+                    }
+                }
+            })
+        }
+    </script>
 {% endblock %}
 </body>
 </html>

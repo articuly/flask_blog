@@ -134,6 +134,7 @@
             </div>
         </div>
     </div>
+    <script src="{{ url_for('static', filename="ckeditor/ckeditor.js") }}"></script>
     <script>
         function closeTab() {
             window.close()
@@ -151,7 +152,7 @@
                     }
                 )
                 city = $("[name=city]").val()
-                intro = $("[name=intro]").val()
+                intro = CKEDITOR.instances['intro'].getData()
                 data = {
                     name: name,
                     sex: sex,
@@ -172,14 +173,12 @@
                     success: function (data) {
                         console.log('success')
                         if (data.result == "success") {
-                            $("#message").html("修改成功<a href='javascript:window.close()'>关闭</a>")
+                            $("#message").html("修改成功<a href='javascript:window.close()'> 关闭</a>")
                         }
                     }
                 })
             })
         }
-
-
     </script>
 {% endblock %}
 </body>

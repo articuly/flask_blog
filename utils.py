@@ -18,7 +18,7 @@ def create_random_user(n):
     for i in range(n):
         random.shuffle(words)
         username = ''.join(words[:6])
-        sex = random.randint(0, 1)  # 0 for female, 1 for male
+        sex = random.randint(1, 2)  # 2 for female, 1 for male
         city = cities[random.randint(0, 6)]
         random.shuffle(hobbies)
         hobby = ', '.join(hobbies[0:random.randint(0, 6)])

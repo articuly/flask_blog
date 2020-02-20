@@ -103,7 +103,7 @@ class AdminEditInfoForm(FlaskForm):
                        choices=[('', '请选择城市'), ('010', '北京'), ('021', '上海'), ('020', '广州'), ('0755', '深圳'),
                                 ('0571', '杭州'), ('023', '重庆'), ('0512', '苏州')],
                        render_kw={'class': 'form-control'})
-    intro = TextAreaField('简介:', render_kw={'class': 'form-control'})
+    intro = CKEditorField('简介:', render_kw={'class': 'form-control'})
 
 
 # 管理员的用户信息修改表单
@@ -122,4 +122,4 @@ class EditInfoForm(FlaskForm):
                        choices=[('', '请选择城市'), ('010', '北京'), ('021', '上海'), ('020', '广州'), ('0755', '深圳'),
                                 ('0571', '杭州'), ('023', '重庆'), ('0512', '苏州')],
                        render_kw={'class': 'form-control'})
-    intro = TextAreaField('简介:', render_kw={'class': 'form-control'})
+    intro = CKEditorField('简介:', render_kw={'class': 'form-control'})
