@@ -106,6 +106,20 @@ class AdminEditInfoForm(FlaskForm):
     intro = CKEditorField('简介:', render_kw={'class': 'form-control'})
 
 
+class UserSearch(FlaskForm):
+    q = StringField('关键字：',
+                    validators=[DataRequired()],
+                    render_kw={'class': 'form-control'})
+    field = SelectField('查询字段：',
+                        choices=[('username', '用户昵称'), ('realname', '真实性名')],
+                        render_kw={'class': 'form-control'})
+    sex = SelectField('查询性别：',
+                      choices=[('0', '所有性别'), ('1', '男'), ('2', '女')],
+                      render_kw={'class': 'form-control'})
+    order = SelectField('排序：', choices=[('1', '按照id升序'), ('2', '按照id降序')],
+                        render_kw={'class': 'form-control'})
+
+
 # 管理员的用户信息修改表单
 # 管理员通常可以修改用户一些不能修改的信息，而且没有限制
 # 可以修改的信息并不一定是用户注册的信息，比如用户等级

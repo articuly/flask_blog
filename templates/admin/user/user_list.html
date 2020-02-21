@@ -8,33 +8,22 @@
             <div class="main col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-12">
                 <h2 class="text-center"><b>用户管理</b></h2>
                 <div class="panel">
-                    <form action="" method="post">
+                    <form action="" method="get">
                         <div class="form-group">
-                            <label for="q" class="control-label">关键字</label>
-                            <input type="text" name="q" class="form-control">
+                            {{ form.q.label }}
+                            {{ form.q }}
                         </div>
                         <div class="form-group">
-                            <label for="field" class="control-label">查询字段</label>
-                            <select name="field" class="form-control">
-                                <option value="">查询字段</option>
-                                <option value="realname">真实名字</option>
-                                <option value="username">用户昵称</option>
-                            </select>
+                            {{ form.field.label }}
+                            {{ form.field }}
                         </div>
                         <div class="form-group">
-                            <label for="sex" class="control-label">性别</label>
-                            <select name="sex" class="form-control">
-                                <option value="" checked>查询性别</option>
-                                <option value="1">男</option>
-                                <option value="0">女</option>
-                            </select>
+                            {{ form.sex.label }}
+                            {{ form.sex }}
                         </div>
                         <div class="form-group">
-                            <label for="排序" class="control-label">排序</label>
-                            <select name="order" class="form-control">
-                                <option value="1" checked>按id升序排序</option>
-                                <option value="2">按id降序排序</option>
-                            </select>
+                            {{ form.order.label }}
+                            {{ form.order }}
                         </div>
                         <div class="form-group ">
                             <div class="row"><input type="submit" name="search" class="btn btn-primary pull-right"
@@ -72,7 +61,13 @@
                 <ul class="pagination">
                     {% for page in pageList %}
                         {% if page!=None %}
-                            <li><a href="{{ url_for("admin_app.userList", page=page) }}">{{ page }}</a></li>
+                            {% if q == None %}
+                                <li><a href="?page={{ page }}">{{ page }}</a></li>
+                            {% else %}
+                                <li>
+                                    <a href="?page={{ page }}&q={{ q }}&field={{ field }}&sex={{ sex }}&order={{ order }}">{{ page }}</a>
+                                </li>
+                            {% endif %}
                         {% else %}
                             <li><a href="#">...</a></li>
                         {% endif %}

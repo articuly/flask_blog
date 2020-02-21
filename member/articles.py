@@ -1,4 +1,4 @@
-from flask import request, redirect, url_for, render_template, session
+from flask import request, redirect, url_for, render_template, session, jsonify
 from libs import db
 from models import Article, Category
 from .member_app import member_app
@@ -23,11 +23,16 @@ def article_post():
             content=content,
             author=session['user']
         )
-        db.session.add(article)
-        db.session.commit()
-        message = {"message": "文章发布成功"}
-        return json.dumps(message)
-    return render_template("member/article/article_post.html")
+        try:
+            db.session.add(article)
+            db.session.commit()
+        except Exception as e:
+            print(str(e))
+            message = {'message': '文章发布失败'}
+        else:
+            message = {"message": "文章发布成功"}
+        return jsonify(message)
+    return render_template("member/article/article_post.html", form=form)
 
 
 @member_app.route("/article/list/<int:page>", methods=['get', 'post'])
@@ -47,7 +52,7 @@ def article_list(page):
         res = Article.query.filter(Article.author == session['user']).filter(condition).order_by(order).paginate(page,
                                                                                                                  10)
     else:
-        res = Article.query.filter(Article.author == session['user']).paginate(page, 10)
+        res = Article.query.filter(Article.author == session['user']).order_by(Article.id.desc()).paginate(page, 10)
     # 无论搜索还是默认查看，都是翻页处理
     articles = res.items
     pageList = res.iter_pages()
@@ -73,18 +78,34 @@ def article_delete(article_id):
 def article_edit(article_id):
     form = set_article_form()
     article = Article.query.get(article_id)
+    message = {'result': ''}
     if not article:
         return redirect(url_for('.article_list'))
-    if request.method == 'POST':
+    if form.validate_on_submit():
         # 只能修改自己的文章
         if article.author == session['user']:
-            article.cate_id = request.form['cate']
-            article.title = request.form['title']
-            article.intro = request.form['intro']
-            article.content = request.form['content']
-            db.session.add(article)
-            db.session.commit()
-            return redirect(url_for('.article_list'))
+            article.cate_id = form.data['cate']
+            article.title = form.data['title']
+            article.thumb = form.data['thumb']
+            article.intro = form.data['intro']
+            article.content = form.data['content']
+            try:
+                db.session.add(article)
+                db.session.commit()
+            except Exception as e:
+                print(str(e))
+                message['result'] = 'fail'
+            else:
+                message['result'] = 'success'
+            return jsonify(message)
+    elif form.errors:
+        print(form.errors)
+    else:
+        form.cate.data = article.cate_id
+        form.title.data = article.title
+        form.thumb.data = article.thumb
+        form.intro.data = article.intro
+        form.content.data = article.content
     return render_template('member/article/article_edit.html', article=article, form=form)
 
 

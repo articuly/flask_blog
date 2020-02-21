@@ -8,39 +8,34 @@
             <div class="main col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-12">
                 <h2 class="text-center"><b>文章管理</b></h2>
                 <div class="panel">
-                    <form action="" method="post" class="form-horizontal">
+                    <form action="" method="get" class="form-horizontal">
                         <div class="row">
                             <div class="form-group">
                                 <div class="col-xs-2 text-right">
-                                    <label for="q" class="control-label">关键字：</label>
+                                    {{ form.q.label(class="control-label") }}
                                 </div>
                                 <div class="col-xs-10">
-                                    <input type="text" name="q" class="form-control">
+                                    {{ form.q }}
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group">
                                 <div class="col-xs-2 text-right">
-                                    <label for="field" class="control-label">查询字段：</label>
+                                    {{ form.field.label(class="control-label") }}
                                 </div>
                                 <div class="col-xs-4">
-                                    <select name="field" class="form-control">
-                                        <option value="title">根据标题查找</option>
-                                        <option value="content">根据文章内容查找</option>
-                                    </select>
+                                    {{ form.field }}
                                 </div>
                                 <div class="col-xs-2 text-right">
-                                    <label for="排序" class="control-label">排序：</label>
+                                    {{ form.order.label(class="control-labe") }}
                                 </div>
                                 <div class="col-xs-4">
-                                    <select name="order" class="form-control">
-                                        <option value="1" checked>按照id升序排序</option>
-                                        <option value="2">按照id降序排序</option>
-                                    </select>
+                                    {{ form.order }}
                                 </div>
                             </div>
                         </div>
+                        {#                        {{ form.csrf_token }}#}
                         <div class="form-group ">
                             <a href="{{ url_for("admin_app.article_post") }}"><input type="button" name="post"
                                                                                      class="btn btn-primary"
@@ -58,21 +53,24 @@
                     <tr>
                         <th>文章ID</th>
                         <th>文章标题</th>
+                        <th>文章分类ID</th>
                         <th>作者</th>
                         <th>发布日期</th>
                         <th>操作</th>
                     </tr>
                     {% for article in articles %}
-                        <tr>
+                        <tr id="article_{{ article.id }}" class="text-center">
                             <td>{{ article.id }}</td>
                             <td>
                                 <a href="{{ url_for("article_app.view", article_id=article.id) }}">{{ article.title }}</a>
                             </td>
+                            <td>{{ article.cate_id }}</td>
                             <td>{{ article.author }}</td>
                             <td>{{ article.pubdate }}</td>
                             <td>
-                                <a href="{{ url_for("admin_app.article_edit", article_id=article.id) }}">编辑</a>
-                                <a href="{{ url_for("admin_app.article_delete", article_id=article.id) }}">删除</a>
+                                <a href="{{ url_for("admin_app.article_edit", article_id=article.id) }}"
+                                   target="_blank">编辑</a>
+                                <a href="javascript:delArticle({{ article.id }})">删除</a>
                             </td>
                         </tr>
                     {% endfor %}
@@ -80,7 +78,7 @@
                 <ul class="pagination">
                     {% for page in pageList %}
                         {% if page!=None %}
-                            <li><a href="{{ url_for("admin_app.article_list", page=page) }}">{{ page }}</a></li>
+                            <li><a href="?page={{ page }}">{{ page }}</a></li>
                         {% else %}
                             <li><a href="#">...</a></li>
                         {% endif %}
@@ -89,6 +87,29 @@
             </div>
         </div>
     </div>
+    <script>
+        function delArticle(articleId) {
+            $.ajax({
+                type: "post",
+                url: "{{ url_for("admin_app.article_delete") }}",
+                data: {article_id: articleId},
+                dataType: "json",
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token() }}")
+                },
+                success: function (data) {
+                    console.log(data)
+                    if (data.result == "success") {
+                        console.log($("#article_" + articleId))
+                        $("#article_" + articleId).html(
+                            "<td colspan=6>" + "删除成功" + "</td>")
+                    } else {
+                        alert('删除过程发生错误，请重新尝试')
+                    }
+                }
+            })
+        }
+    </script>
 {% endblock %}
 </body>
 </html>

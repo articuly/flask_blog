@@ -3,41 +3,55 @@ from libs import db, csrf
 from models import User
 from .admin_app import admin_app
 import json
-from forms.account_form import AdminEditInfoForm
+from forms.account_form import AdminEditInfoForm, UserSearch
 
 
 # 如果用户刚进入列表页是访问http://127.0.0.1/user/list与"/list/<int:page>"不匹配，提供一个默认带有page默认值的路由
 # 用户列表功能
-@admin_app.route('/user/list/<int:page>', methods=['get', 'post'])
-@admin_app.route('/user/list', defaults={'page': 1}, methods=['get', 'post'])
-def userList(page):
-    if request.method == 'POST':
-        q = request.form['q']
-        condition = {request.form['field']: q}
+@admin_app.route('/user/list/', methods=['get', 'post'])
+def userList():
+    form = UserSearch()
+    q = request.args.get('q')
+    page = request.args.get('page', 1)
+    if q is not None:
+        page = request.args.get('page', 1)
+        form_field = request.args.get('field')
+        form_sex = request.args.get('sex')
+        form_order = request.args.get('order')
+        print(q, form_field, form_sex, form_order)
+        # condition = {request.form['field']: q}
         # filter_by
         # users = User.query.filter_by(**condition).all()
         # filter like
-        if request.form['field'] == 'realname':
-            condition = User.realname.like('%%%s%%' % q)
-        else:
+        if form_field == 'username':
             condition = User.username.like('%%%s%%' % q)
-        if request.form['order'] == '1':
+        else:
+            condition = User.realname.like('%%%s%%' % q)
+        if form_order == '1':
             order = User.id.asc()
         else:
             order = User.id.desc()
-        if request.form['sex'] == '':
-            res = User.query.filter(condition).order_by(order).paginate(page, 10)
+        if request.args.get('sex') == '0':
+            res = User.query.filter(condition).order_by(order).paginate(int(page), 10)
         else:
-            res = User.query.filter(condition, User.sex == request.form['sex']).order_by(order).paginate(page, 10)
+            res = User.query.filter(condition, User.sex == request.args.get('sex')).order_by(order).paginate(page, 10)
+        users = res.items
+        pageList = res.iter_pages()
+        total = res.total
+        pages = res.pages
+        return render_template('admin/user/user_list.html', users=users, pageList=pageList, pages=pages, total=total,
+                               form=form, q=q, field=form_field, sex=form_sex, order=form_order)
     else:
         # users = User.query.all()
         # 无论搜索还是默认查看，都是翻页处理
-        res = User.query.paginate(page, 10)
-    users = res.items
-    pageList = res.iter_pages()
-    total = res.total
-    pages = res.pages
-    return render_template('admin/user/user_list.html', users=users, pageList=pageList, pages=pages, total=total)
+        res = User.query.paginate(int(page), 10)
+        users = res.items
+        pageList = res.iter_pages()
+        total = res.total
+        pages = res.pages
+        print(q, total)
+        return render_template('admin/user/user_list.html', users=users, pageList=pageList, pages=pages, total=total,
+                               form=form, q=q)
 
 
 # 根据用户id删除用户

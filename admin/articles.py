@@ -1,8 +1,8 @@
 from flask import request, redirect, url_for, render_template, session, jsonify
-from libs import db
+from libs import db, csrf
 from models import Article, Category
 from .admin_app import admin_app
-from forms.article_form import ArticleForm
+from forms.article_form import ArticleForm, ArticleSearchForm
 
 
 @admin_app.route("/article/post", methods=['get', 'post'])
@@ -28,46 +28,65 @@ def article_post():
             db.session.commit()
         except Exception as e:
             print(str(e))
-            message = {'message': '发布失败'}
+            message = {'message': '文章发布失败'}
         else:
-            message = {'message': '发布成功'}
+            message = {'message': '文章发布成功'}
         return jsonify(message)
     return render_template("admin/article/article_post.html", form=form)
 
 
-@admin_app.route("/article/list/<int:page>", methods=['get', 'post'])
-@admin_app.route("/article/list", defaults={"page": 1}, methods=['get', 'post'])
-def article_list(page):
-    if request.method == 'POST':
-        q = request.form['q']
-        condition = {request.form['field']: q}
-        if request.form['field'] == 'title':
+@admin_app.route("/article/list/", methods=['get', 'post'])
+def article_list():
+    form = ArticleSearchForm()
+    q = request.args.get('q')
+    page = request.args.get('page', 1)
+    if q is not None:
+        # condition = {request.form['field']: q}
+        form_field = request.args.get('field')
+        form_order = request.args.get('order')
+        print(q, page, form_field, form_order)
+        if form_field == 'title':
             condition = Article.title.like('%%%s%%' % q)
         else:
             condition = Article.content.like('%%%s%%' % q)
-        if request.form['order'] == '1':
+        if form_order == '1':
             order = Article.id.asc()
         else:
             order = Article.id.desc()
-        res = Article.query.filter(condition).order_by(order).paginate(page, 10)
+        res = Article.query.filter(condition).order_by(order).paginate(int(page), 10)
+        articles = res.items
+        pageList = res.iter_pages()
+        total = res.total
+        pages = res.pages
+        return render_template('admin/article/article_list_search.html', articles=articles, pageList=pageList,
+                               total=total,
+                               pages=pages, form=form, q=q, field=form_field, order=form_order)
     else:
-        res = Article.query.paginate(page, 10)
-    # 无论搜索还是默认查看，都是翻页处理
-    articles = res.items
-    pageList = res.iter_pages()
-    total = res.total
-    pages = res.pages
-    return render_template("admin/article/article_list.html", articles=articles, pageList=pageList, total=total,
-                           pages=pages)
+        res = Article.query.order_by(Article.id.desc()).paginate(int(page), 10)
+        # 无论搜索还是默认查看，都是翻页处理
+        articles = res.items
+        pageList = res.iter_pages()
+        total = res.total
+        pages = res.pages
+        return render_template("admin/article/article_list.html", articles=articles, pageList=pageList, total=total,
+                               pages=pages, form=form)
 
 
 # 根据文章id删除文章
-@admin_app.route('/article/delete/<int:article_id>')
-def article_delete(article_id):
+@admin_app.route('/article/delete/', methods=['post'])
+def article_delete():
+    csrf.protect()
+    article_id = int(request.form.get('article_id'))
+    message = {}
     article = Article.query.get(article_id)
-    db.session.delete(article)
-    db.session.commit()
-    return redirect(url_for('.article_list'))
+    try:
+        db.session.delete(article)
+        db.session.commit()
+    except:
+        message['result'] = 'fail'
+    else:
+        message['result'] = 'success'
+    return jsonify(message)
 
 
 # 文章修改
