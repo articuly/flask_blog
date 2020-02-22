@@ -35,7 +35,10 @@ def html(page):
     res = Article.query.order_by(Article.id.desc()).paginate(page, 10)
     articles = res.items
     pageList = res.iter_pages()
-    return render_template('index.html', page=page, articles=articles, pageList=pageList)
+    # print(dir(articles))
+    # print(dir(pageList))
+    # print(dir(res))
+    return render_template('index.html', page=page, articles=articles, pageList=pageList, res=res)
 
 
 # index指向根路经

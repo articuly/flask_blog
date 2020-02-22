@@ -60,8 +60,8 @@ def article_list():
         pageList = res.iter_pages()
         total = res.total
         pages = res.pages
-        # 条件搜索将变量转到另一个模板
-        return render_template('admin/article/article_list_search.html', articles=articles, pageList=pageList,
+        # 有条件搜索和无搜索转到同一模板，用模板语法来区分get的链接
+        return render_template('admin/article/article_list.html', articles=articles, pageList=pageList,
                                total=total,
                                pages=pages, form=form, q=q, field=form_field, order=form_order)
     else:
@@ -71,7 +71,7 @@ def article_list():
         pageList = res.iter_pages()
         total = res.total
         pages = res.pages
-        # 没有搜索用原来模板
+        # 有条件搜索和无搜索转到同一模板，用模板语法来区分get的链接
         return render_template("admin/article/article_list.html", articles=articles, pageList=pageList, total=total,
                                pages=pages, form=form)
 

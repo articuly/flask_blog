@@ -26,4 +26,4 @@ def getArticleList(cate_id, page):
     articles = res.items
     pageList = res.iter_pages()
     return render_template('article/cate_articles.html', cate_id=cate_id, articles=articles, pageList=pageList,
-                           category=category)
+                           category=category, res=res)

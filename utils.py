@@ -37,14 +37,14 @@ def create_random_user(n):
     db.session.commit()
 
 
-# 创建N篇随机文章
-def create_random_article(n):
+# 为某个作者创建N篇随机文章
+def create_random_article(n, a):
     words = list('abcdefghijklmnopqrstuvwxyz')
     for i in range(n):
         random.shuffle(words)
         title = ''.join(words[:6])
         intro = 'test for ' + title
-        author = 'admin'
+        author = a
         content = ''.join(words)
         cate_id = random.randint(1, 7)
         article = Article(

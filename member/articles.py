@@ -37,31 +37,42 @@ def article_post():
 
 
 # 显示会员文章列表
-@member_app.route("/article/list/<int:page>", methods=['get', 'post'])
-@member_app.route("/article/list", defaults={"page": 1}, methods=['get', 'post'])
-def article_list(page):
-    if request.method == 'POST':
-        q = request.form['q']
-        condition = {request.form['field']: q}
-        if request.form['field'] == 'title':
+@member_app.route("/article/list/", methods=['get', 'post'])
+def article_list():
+    form = ArticleSearchForm()
+    q = request.args.get('q')
+    page = request.args.get('page', 1)
+    if q is not None:
+        form_field = request.args.get('field')
+        form_order = request.args.get('order')
+        if form_field == 'title':
             condition = Article.title.like('%%%s%%' % q)
         else:
             condition = Article.content.like('%%%s%%' % q)
-        if request.form['order'] == '1':
+        if form_order == '1':
             order = Article.id.asc()
         else:
             order = Article.id.desc()
-        res = Article.query.filter(Article.author == session['user']).filter(condition).order_by(order).paginate(page,
-                                                                                                                 10)
+        res = Article.query.filter(Article.author == session['user']).filter(condition).order_by(order).paginate(
+            int(page), 10)
+        articles = res.items
+        pageList = res.iter_pages()
+        total = res.total
+        pages = res.pages
+        # 有条件搜索和无搜索转到同一模板，用模板语法来区分get的链接
+        return render_template('member/article/article_list.html', articles=articles, pageList=pageList, total=total,
+                               pages=pages, form=form, q=q, field=form_field, order=form_order)
     else:
-        res = Article.query.filter(Article.author == session['user']).order_by(Article.id.desc()).paginate(page, 10)
-    # 无论搜索还是默认查看，都是翻页处理
-    articles = res.items
-    pageList = res.iter_pages()
-    total = res.total
-    pages = res.pages
-    return render_template("member/article/article_list.html", articles=articles, pageList=pageList, total=total,
-                           pages=pages)
+        res = Article.query.filter(Article.author == session['user']).order_by(Article.id.desc()).paginate(
+            int(page), 10)
+        # 无论搜索还是默认查看，都是翻页处理
+        articles = res.items
+        pageList = res.iter_pages()
+        total = res.total
+        pages = res.pages
+        # 有条件搜索和无搜索转到同一模板，用模板语法来区分get的链接
+        return render_template("member/article/article_list.html", articles=articles, pageList=pageList, total=total,
+                               pages=pages, form=form)
 
 
 # 会员根据文章id删除文章

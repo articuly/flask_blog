@@ -78,7 +78,13 @@
                 <ul class="pagination">
                     {% for page in pageList %}
                         {% if page!=None %}
-                            <li><a href="?page={{ page }}">{{ page }}</a></li>
+                            {% if q==None %}
+                                <li><a href="?page={{ page }}">{{ page }}</a></li>
+                            {% else %}
+                                <li>
+                                    <a href="?page={{ page }}&q={{ q }}&field={{ field }}&order={{ order }}">{{ page }}</a>
+                                </li>
+                            {% endif %}
                         {% else %}
                             <li><a href="#">...</a></li>
                         {% endif %}
