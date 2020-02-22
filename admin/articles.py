@@ -79,17 +79,39 @@ def article_list():
 # 根据文章id删除文章
 @admin_app.route('/article/delete/', methods=['post'])
 def article_delete():
-    csrf.protect()
     article_id = int(request.form.get('article_id'))
-    message = {}
-    article = Article.query.get(article_id)
-    try:
-        db.session.delete(article)
-        db.session.commit()
-    except:
-        message['result'] = 'fail'
-    else:
-        message['result'] = 'success'
+    message = {'result': 'fail', 'id': article_id, 'type': 'del'}
+    if article_id:
+        article = Article.query.get(article_id)
+        if article:
+            try:
+                db.session.delete(article)
+                db.session.commit()
+            except Exception as e:
+                print(str(e))
+            else:
+                message['result'] = 'success'
+    return jsonify(message)
+
+
+# 根据文章id推荐文章
+@admin_app.route('/article/recommend/', methods=['post'])
+def article_recommend():
+    article_id = int(request.form.get('article_id'))
+    message = {'result': 'fail', 'id': article_id, 'type': 'recommend'}
+    if article_id:
+        article = Article.query.get(article_id)
+        if article:
+            if article.is_recommend is None:
+                article.is_recommend = 1  # None无法自增
+            else:
+                article.is_recommend += 1  # 每推荐一次推荐值加一，推荐值越多越靠前
+            try:
+                db.session.commit()
+            except Exception as e:
+                print(str(e))
+            else:
+                message['result'] = 'success'
     return jsonify(message)
 
 

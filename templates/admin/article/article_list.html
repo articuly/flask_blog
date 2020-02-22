@@ -1,7 +1,17 @@
 {% extends "admin/admin_base.html" %}
-<!DOCTYPE html>
-<html>
-<body>
+{% block style %}
+    .del{
+    color: red;
+    border: 1px solid red;
+    text-decoration: line-through;
+    }
+    .recommend{
+    color: blue;
+    border: 1px solid blue;
+    font-size: 1.2em;
+    }
+
+{% endblock %}
 {% block content %}
     <div class="container-fluid">
         <div class="row">
@@ -70,6 +80,7 @@
                             <td>
                                 <a href="{{ url_for("admin_app.article_edit", article_id=article.id) }}"
                                    target="_blank">编辑</a>
+                                <a href="javascript:recommendArticle({{ article.id }})">推荐</a>
                                 <a href="javascript:delArticle({{ article.id }})">删除</a>
                             </td>
                         </tr>
@@ -94,11 +105,21 @@
         </div>
     </div>
     <script>
-        function delArticle(articleId) {
+        function recommendArticle(article_id) {
+            url = "{{ url_for("admin_app.article_recommend") }}"
+            send_data(url, {"article_id": article_id})
+        }
+
+        function delArticle(article_id) {
+            url = "{{ url_for("admin_app.article_delete") }}"
+            send_data(url, {"article_id": article_id})
+        }
+
+        function send_data(url, data) {
             $.ajax({
                 type: "post",
-                url: "{{ url_for("admin_app.article_delete") }}",
-                data: {article_id: articleId},
+                url: url,
+                data: data,
                 dataType: "json",
                 beforeSend: function (xhr) {
                     xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token() }}")
@@ -106,16 +127,25 @@
                 success: function (data) {
                     console.log(data)
                     if (data.result == "success") {
-                        console.log($("#article_" + articleId))
-                        $("#article_" + articleId).html(
-                            "<td colspan=6>" + "删除成功" + "</td>")
+                        console.log($("#article_" + data.id))
+                        $("#article_" + data.id).toggleClass(data.type)
                     } else {
-                        alert('删除过程发生错误，请重新尝试')
+                        alert('过程发生错误，请重新尝试')
                     }
                 }
             })
         }
+
+        window.onload = function () {
+            {% for article in articles %}
+                {% if article.is_recommend!=None %}
+                    $("#article_{{ article.id }}").css({
+                        "color": "blue",
+                        "border": "1px solid blue",
+                        "font-size": "1.1em"
+                    })
+                {% endif %}
+            {% endfor %}
+        }
     </script>
 {% endblock %}
-</body>
-</html>

@@ -82,26 +82,11 @@
                         </div>
                         <div class="panel-body">
                             <ul class="list-group">
-                                <li class="list-group-item">
-                                    Python全栈工程师是怎样的职位？
-                                    <span class="badge">999</span>
-                                </li>
-                                <li class="list-group-item">
-                                    Python能做什么？
-                                    <span class="badge">800</span>
-                                </li>
-                                <li class="list-group-item">
-                                    Python在商业数据分析的应用
-                                    <span class="badge">700</span>
-                                </li>
-                                <li class="list-group-item">
-                                    Python十大最常用的第三方插件
-                                    <span class="badge">700</span>
-                                </li>
-                                <li class="list-group-item">
-                                    Python在人工智能领域的应用
-                                    <span class="badge">600</span>
-                                </li>
+                                {% for article in recommend_articles %}
+                                    <li class="list-group-item"><a
+                                            href="{{ url_for('article_app.view', article_id=article.id) }}">{{ article.title }}</a>
+                                        <span class="badge">{{ article.is_recommend }}</span></li>
+                                {% endfor %}
                             </ul>
                         </div>
                     </div>

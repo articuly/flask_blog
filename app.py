@@ -32,6 +32,14 @@ app.register_blueprint(upload_app, url_prefix="/upload")
 @app.route('/<int:page>')
 @app.route('/', defaults={'page': 1})
 def html(page):
+    # 提取最新的公告
+    alert = Alert.query.order_by(Alert.alert_id.desc()).first()
+
+    # 提取所有推荐值前15的文章
+    recommend_articles = Article.query.filter(Article.is_recommend != None).order_by(Article.is_recommend.desc()).limit(
+        15)
+
+    # 导航栏搜索功能
     q = request.args.get('nav_search')
     if request.method == 'GET' and q is not None and q != '':
         print('nav_search', q)
@@ -42,15 +50,16 @@ def html(page):
         pageList = res.iter_pages()
         total = res.total
         return render_template('search_articles.html', articles=articles, pageList=pageList, total=total, page=page,
-                               q=q)
+                               q=q, recommend_articles=recommend_articles)
+    # 按最新发布的顺序显示文章
     res = Article.query.order_by(Article.id.desc()).paginate(page, 10)
-    alert = Alert.query.order_by(Alert.alert_id.desc()).first()
     articles = res.items
     pageList = res.iter_pages()
     # print(dir(articles))
     # print(dir(pageList))
     # print(dir(res))
-    return render_template('index.html', page=page, articles=articles, pageList=pageList, res=res, alert=alert)
+    return render_template('index.html', page=page, articles=articles, pageList=pageList, res=res, alert=alert,
+                           recommend_articles=recommend_articles)
 
 
 # index指向根路经
