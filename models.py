@@ -42,5 +42,9 @@ class Category(db.Model):
     cate_order = db.Column(db.Integer, default=0)
     articles = db.relationship('Article')
 
-# class Alert(db.Model):
-#     pass
+
+# 首页和分类文章页的公告数据库
+class Alert(db.Model):
+    alert_id = db.Column(db.Integer, primary_key=True)
+    alert_time = db.Column(db.DateTime, default=datetime.now)
+    alert_content = db.Column(db.String)

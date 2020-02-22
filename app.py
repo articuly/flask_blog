@@ -1,7 +1,7 @@
 from flask import Flask, render_template
 from flask import request, redirect, url_for, session, make_response
 from flask_migrate import Migrate
-from models import User, Category, Article
+from models import User, Category, Article, Alert
 from libs import db, ckeditor, csrf, dropzone
 from settings import config
 from views.users import user_app
@@ -44,12 +44,13 @@ def html(page):
         return render_template('search_articles.html', articles=articles, pageList=pageList, total=total, page=page,
                                q=q)
     res = Article.query.order_by(Article.id.desc()).paginate(page, 10)
+    alert = Alert.query.order_by(Alert.alert_id.desc()).first()
     articles = res.items
     pageList = res.iter_pages()
     # print(dir(articles))
     # print(dir(pageList))
     # print(dir(res))
-    return render_template('index.html', page=page, articles=articles, pageList=pageList, res=res)
+    return render_template('index.html', page=page, articles=articles, pageList=pageList, res=res, alert=alert)
 
 
 # index指向根路经

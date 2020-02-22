@@ -1,5 +1,5 @@
 from flask import redirect, url_for, render_template, request
-from models import Article, Category
+from models import Article, Category, Alert
 from flask import Blueprint
 
 article_app = Blueprint('article_app', __name__)
@@ -22,11 +22,12 @@ def getArticleList(cate_id, page):
         res = Article.query.order_by(Article.id.desc()).paginate(page, 15)
     else:
         res = Article.query.order_by(Article.id.desc()).filter_by(cate_id=cate_id).paginate(page, 15)
+    alert = Alert.query.order_by(Alert.alert_id.desc()).first()
     category = Category.query.get(cate_id)
     articles = res.items
     pageList = res.iter_pages()
     return render_template('article/cate_articles.html', cate_id=cate_id, articles=articles, pageList=pageList,
-                           category=category, res=res)
+                           category=category, res=res, alert=alert)
 
 # 主页搜索框搜索文章
 # @article_app.route('/search', methods=['get'])

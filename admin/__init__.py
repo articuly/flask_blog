@@ -3,3 +3,4 @@ from .articles import *
 from .category import *
 from .users import *
 from .upload import *
+from .alert import *

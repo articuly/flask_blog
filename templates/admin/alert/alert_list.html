@@ -1,0 +1,55 @@
+{% extends'admin/admin_base.html' %}
+<!DOCTYPE html>
+<head>
+</head>
+<body>
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="main col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-12">
+                <h2 class="text-center"><b>公告管理</b></h2>
+                <div class="panel">
+                    <div class="row">
+                        <form action="" method="post" class="form-horizontal">
+                            <div class="form-group">
+                                <div class="col-xs-2 text-right middle">
+                                    <label for="alert"><p style="font-size: 1.2em">公告：</p></label>
+                                </div>
+                                <div class="col-xs-8">
+                                    <input class="form-control" type="text" name="alert" id="alert" value=""
+                                           placeholder="请填写公告内容">
+                                </div>
+                                <div class="col-xs-2">
+                                    <input type="submit" name="submit" id="btn1" class="btn btn-primary" value="发布">
+                                </div>
+                            </div>
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                        </form>
+                    </div>
+                    <div class="row">
+                        <table class="table table-bordered">
+                            <tr>
+                                <th>公告ID</th>
+                                <th>公告内容</th>
+                                <th>发布日期</th>
+                                <th>操作</th>
+                            </tr>
+                            {% for alert in alerts %}
+                                <tr class="text-center">
+                                    <td>{{ alert.alert_id }}</td>
+                                    <td>{{ alert.alert_content }}</td>
+                                    <td>{{ alert.alert_time }}</td>
+                                    <td>
+                                        <a href="{{ url_for("admin_app.alert_remove", alert_id=alert.alert_id) }}">删除</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+</body>
+</html>
