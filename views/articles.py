@@ -1,4 +1,4 @@
-from flask import redirect, url_for, render_template
+from flask import redirect, url_for, render_template, request
 from models import Article, Category
 from flask import Blueprint
 
@@ -27,3 +27,17 @@ def getArticleList(cate_id, page):
     pageList = res.iter_pages()
     return render_template('article/cate_articles.html', cate_id=cate_id, articles=articles, pageList=pageList,
                            category=category, res=res)
+
+# 主页搜索框搜索文章
+# @article_app.route('/search', methods=['get'])
+# def search_article():
+#     q = request.args.get('nav_search')
+#     page = request.args.get('page', 1)
+#     print('nav_search',q)
+#     if request.method=='GET':
+#         res = Article.query.filter(Article.title.like('%%%s%%' % q)).order_by(Article.id.desc()).paginate(int(page), 15)
+#         articles = res.items
+#         pageList = res.iter_pages()
+#         total = res.total
+#         return render_template('article/search_articles.html', res=res, articles=articles, pageList=pageList,
+#                                total=total, page=page, q=q)

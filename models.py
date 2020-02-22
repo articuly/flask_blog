@@ -41,3 +41,6 @@ class Category(db.Model):
     cate_name = db.Column(db.String, unique=True)
     cate_order = db.Column(db.Integer, default=0)
     articles = db.relationship('Article')
+
+# class Alert(db.Model):
+#     pass

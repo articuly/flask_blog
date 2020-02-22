@@ -32,6 +32,17 @@ app.register_blueprint(upload_app, url_prefix="/upload")
 @app.route('/<int:page>')
 @app.route('/', defaults={'page': 1})
 def html(page):
+    q = request.args.get('nav_search')
+    if request.method == 'GET' and q is not None and q != '':
+        print('nav_search', q)
+        page = request.args.get('page', 1)
+        res = Article.query.filter(Article.content.like('%%%s%%' % q)).order_by(Article.id.desc()).paginate(int(page),
+                                                                                                            15)
+        articles = res.items
+        pageList = res.iter_pages()
+        total = res.total
+        return render_template('search_articles.html', articles=articles, pageList=pageList, total=total, page=page,
+                               q=q)
     res = Article.query.order_by(Article.id.desc()).paginate(page, 10)
     articles = res.items
     pageList = res.iter_pages()
