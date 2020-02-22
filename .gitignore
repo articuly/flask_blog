@@ -8,3 +8,4 @@ forms/__pycache__/
 migrations/__pycache__/
 migrations/versions/__pycache__/
 views/__pycache__/upload.cpython-37.pyc
+*.pyc
