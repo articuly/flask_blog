@@ -1,16 +1,18 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, SelectMultipleField, SelectField, RadioField, \
+from wtforms import StringField, PasswordField, SubmitField, SelectMultipleField, SelectField, RadioField, \
     TextAreaField, widgets
 from flask_ckeditor import CKEditorField
 from wtforms.validators import DataRequired, Length, ValidationError, EqualTo
 
 
+# 定义多选框的类
 class CheckBoxField(SelectMultipleField):
     widget = widgets.TableWidget(with_table_tag=False)
     # widget = widgets.ListWidget()
     option_widget = widgets.CheckboxInput()
 
 
+# 登陆功能表单类
 class LoginForm(FlaskForm):
     username = StringField('用户名', render_kw={'class': 'form-control', 'placeholder': 'enter your name'},
                            validators=[DataRequired('必须填写用户名')])
@@ -52,6 +54,7 @@ class BadWords:
                 raise ValidationError(self.message)
 
 
+# 注册功能表单类
 class RegisterForm(FlaskForm):
     name = StringField('姓名：',
                        validators=[DataRequired('真实姓名必填'), BadWords(['admin', 'articuly', '客户服务'], message='不能包括敏感词')],
@@ -106,6 +109,7 @@ class AdminEditInfoForm(FlaskForm):
     intro = CKEditorField('简介:', render_kw={'class': 'form-control'})
 
 
+# 用户搜索功能表单类
 class UserSearch(FlaskForm):
     q = StringField('关键字：',
                     validators=[DataRequired()],

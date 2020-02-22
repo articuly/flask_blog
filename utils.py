@@ -3,6 +3,7 @@ from models import User, Article
 import random
 
 
+# 创建admin用户，不受用户名要6位以上的限制
 def create_admin():
     user = User(realname='admin', username='admin', sex='1', city='020', hobby='writing',
                 intro='administrator')
@@ -11,6 +12,7 @@ def create_admin():
     db.session.commit()
 
 
+# 创建N个随机用户
 def create_random_user(n):
     words = list('abcdefghijklmnopqrstuvwxyz')
     cities = ['010', '020', '021', '023', '0755', '0571', '0512']
@@ -34,15 +36,17 @@ def create_random_user(n):
         db.session.add(user)
     db.session.commit()
 
+
+# 创建N篇随机文章
 def create_random_article(n):
     words = list('abcdefghijklmnopqrstuvwxyz')
     for i in range(n):
         random.shuffle(words)
         title = ''.join(words[:6])
-        intro= 'test for ' + title
+        intro = 'test for ' + title
         author = 'admin'
-        content= ''.join(words)
-        cate_id=random.randint(1,7)
+        content = ''.join(words)
+        cate_id = random.randint(1, 7)
         article = Article(
             title=title,
             intro=intro,

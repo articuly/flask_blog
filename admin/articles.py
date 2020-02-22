@@ -5,6 +5,7 @@ from .admin_app import admin_app
 from forms.article_form import ArticleForm, ArticleSearchForm
 
 
+# 发布文章
 @admin_app.route("/article/post", methods=['get', 'post'])
 def article_post():
     form = set_article_form()
@@ -35,6 +36,7 @@ def article_post():
     return render_template("admin/article/article_post.html", form=form)
 
 
+# 显示文章列表功能，用get方法修复条件搜索后按2之后的分页跳回全文章列表的问题
 @admin_app.route("/article/list/", methods=['get', 'post'])
 def article_list():
     form = ArticleSearchForm()
@@ -58,6 +60,7 @@ def article_list():
         pageList = res.iter_pages()
         total = res.total
         pages = res.pages
+        # 条件搜索将变量转到另一个模板
         return render_template('admin/article/article_list_search.html', articles=articles, pageList=pageList,
                                total=total,
                                pages=pages, form=form, q=q, field=form_field, order=form_order)
@@ -68,6 +71,7 @@ def article_list():
         pageList = res.iter_pages()
         total = res.total
         pages = res.pages
+        # 没有搜索用原来模板
         return render_template("admin/article/article_list.html", articles=articles, pageList=pageList, total=total,
                                pages=pages, form=form)
 
@@ -122,6 +126,7 @@ def article_edit(article_id):
     return render_template('admin/article/article_edit.html', article=article, form=form)
 
 
+# 初始化文章表单类的分类选择，需要从数据库读取数据
 def set_article_form():
     form = ArticleForm()
     form.cate.choices = [(row.cate_id, row.cate_name) for row in Category.query.all()]

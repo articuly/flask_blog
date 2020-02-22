@@ -1,9 +1,9 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SelectField, TextAreaField, HiddenField, widgets, IntegerField
+from wtforms import StringField, SelectField, TextAreaField, HiddenField, IntegerField
 from wtforms.validators import DataRequired, NumberRange
-from models import Category
 
 
+# 文章功能表单类
 class ArticleForm(FlaskForm):
     # coerce 表示选项值强制转换为int类型
     cate = SelectField("分类：", coerce=int,
@@ -21,6 +21,7 @@ class ArticleForm(FlaskForm):
                             render_kw={"class": "form-control"})
 
 
+# 文章搜索功能表单类
 class ArticleSearchForm(FlaskForm):
     q = StringField('关键字：',
                     validators=[DataRequired()],
@@ -32,6 +33,7 @@ class ArticleSearchForm(FlaskForm):
                         render_kw={'class': 'form-control'})
 
 
+# 目录功能表单类
 class CategoryForm(FlaskForm):
     name = StringField('分类名称：', validators=[DataRequired('必须输入分类名称')], render_kw={'class': 'form-control'})
     order = IntegerField('显示顺序：',

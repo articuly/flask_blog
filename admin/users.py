@@ -7,7 +7,7 @@ from forms.account_form import AdminEditInfoForm, UserSearch
 
 
 # 如果用户刚进入列表页是访问http://127.0.0.1/user/list与"/list/<int:page>"不匹配，提供一个默认带有page默认值的路由
-# 用户列表功能
+# 用户列表功能，用get方法修复搜索后按2之后分页会回到全用户搜索的问题
 @admin_app.route('/user/list/', methods=['get', 'post'])
 def userList():
     form = UserSearch()
@@ -39,6 +39,7 @@ def userList():
         pageList = res.iter_pages()
         total = res.total
         pages = res.pages
+        # 有条件搜索和无搜索转到同一模板，用模板语法来区分get的链接
         return render_template('admin/user/user_list.html', users=users, pageList=pageList, pages=pages, total=total,
                                form=form, q=q, field=form_field, sex=form_sex, order=form_order)
     else:
@@ -50,11 +51,12 @@ def userList():
         total = res.total
         pages = res.pages
         print(q, total)
+        # 有条件搜索和无搜索转到同一模板，用模板语法来区分get的链接
         return render_template('admin/user/user_list.html', users=users, pageList=pageList, pages=pages, total=total,
                                form=form, q=q)
 
 
-# 根据用户id删除用户
+# 根据用户id删除用户，启用csrf保护
 @admin_app.route('/user/delete/', methods=['post'])
 def deleteUser():
     csrf.protect()
@@ -75,7 +77,7 @@ def deleteUser():
     return json.dumps(message)
 
 
-# 用户信息修改
+# 修改所有用户信息
 @admin_app.route("/user/edit/<int:user_id>", methods=['get', 'post'])
 def editUser(user_id):
     form = AdminEditInfoForm()

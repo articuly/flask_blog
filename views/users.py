@@ -31,7 +31,7 @@ def register():
             city=city,
             intro=intro,
         )
-        # 密码加码
+        # Hash方式加密原来的密码
         user.hash_password(password)
         try:
             db.session.add(user)

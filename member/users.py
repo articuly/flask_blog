@@ -5,10 +5,9 @@ from .member_app import member_app
 from forms.account_form import EditInfoForm
 
 
-# 用户信息修改
+# 会员修改自己的信息，普通会员只能修改自己的资料
 @member_app.route("/user/edit/", methods=['get', 'post'])
 def userEdit():
-    # 普通会员只能修改自己的资料
     # TODO 修改资料的时候还需要验证密码
     message = None
     form = EditInfoForm()

@@ -2,8 +2,10 @@ import os
 import json
 from flask import request, render_template, current_app, session
 from .member_app import member_app
+from views.upload import get_dir, create_filename
 
 
+# 会员用户使用JQ方式上传文件
 @member_app.route('/upload', methods=['get', 'post'])
 def upload():
     if request.method == 'POST':
@@ -36,28 +38,3 @@ def upload():
         message['result'] = 'success'
         return json.dumps(message)
     return render_template('member/upload/jquery_upload.html')
-
-
-def get_dir():
-    '''
-    生成文件存放路经
-    返回存放文件路经
-    '''
-    from datetime import date
-    base_path = './static/uploads'  # 上传文件存放路经
-    d = date.today()  # 根据上传的日期存放
-    path = os.path.join(base_path, session['user'], str(d.year), str(d.month))  # 生成存储路经
-    if not os.path.exists(path):
-        os.makedirs(path)
-    return path
-
-
-def create_filename(filename):
-    '''
-    生成随机文件名
-    :arg filename
-    '''
-    import uuid
-    ext = os.path.splitext(filename)[1]
-    new_file_name = str(uuid.uuid4()) + ext
-    return new_file_name

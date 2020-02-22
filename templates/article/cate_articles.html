@@ -20,12 +20,12 @@
                         {% for article in articles %}
                             <li class="media">
                                 <div class="pull-left">
-                                    {% if article.thumb!=None %}
-                                        <img src="{{ article.thumb }}" class="media-object"
-                                             style="width: 120px; height: 120px;">
-                                    {% else %}
+                                    {% if article.thumb==None or article.thumb=="" %}
                                         <img src="{{ url_for('static', filename='img/side/articuly.jpg') }}"
                                              class="media-object" style="width: 120px; height: 120px;">
+                                    {% else %}
+                                        <img src="{{ article.thumb }}" class="media-object"
+                                             style="width: 120px; height: 120px;">
                                     {% endif %}
                                 </div>
                                 <div class="media-body">

@@ -6,6 +6,7 @@ import json
 from forms.article_form import ArticleForm, ArticleSearchForm
 
 
+# 会员发布文章
 @member_app.route("/article/post", methods=['get', 'post'])
 def article_post():
     form = set_article_form()
@@ -35,6 +36,7 @@ def article_post():
     return render_template("member/article/article_post.html", form=form)
 
 
+# 显示会员文章列表
 @member_app.route("/article/list/<int:page>", methods=['get', 'post'])
 @member_app.route("/article/list", defaults={"page": 1}, methods=['get', 'post'])
 def article_list(page):
@@ -62,7 +64,7 @@ def article_list(page):
                            pages=pages)
 
 
-# 根据文章id删除文章
+# 会员根据文章id删除文章
 @member_app.route('/article/delete/<int:article_id>')
 def article_delete(article_id):
     article = Article.query.get(article_id)
@@ -73,7 +75,7 @@ def article_delete(article_id):
     return redirect(url_for('.article_list'))
 
 
-# 文章修改
+# 会员修改文章
 @member_app.route('/article/edit/<int:article_id>', methods=['get', 'post'])
 def article_edit(article_id):
     form = set_article_form()
@@ -109,6 +111,7 @@ def article_edit(article_id):
     return render_template('member/article/article_edit.html', article=article, form=form)
 
 
+# 初始化文章表单类的分类选择，需要从数据库读取数据
 def set_article_form():
     form = ArticleForm()
     form.cate.choices = [(row.cate_id, row.cate_name) for row in Category.query.all()]

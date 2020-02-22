@@ -11,15 +11,17 @@ from admin import admin_app
 from member import member_app
 from forms.account_form import LoginForm
 
+# 实例化Flask
 app = Flask(__name__)
 app.config.from_object(config['development'])
 
-# 初始化插件
+# 初始化各种插件
 db.init_app(app)
 ckeditor.init_app(app)
 csrf.init_app(app)
 dropzone.init_app(app)
-# 注册功能的蓝印
+
+# 注册蓝图功能
 app.register_blueprint(admin_app, url_prefix='/admin')
 app.register_blueprint(member_app, url_prefix='/member')
 app.register_blueprint(user_app, url_prefix='/user')
@@ -36,6 +38,7 @@ def html(page):
     return render_template('index.html', page=page, articles=articles, pageList=pageList)
 
 
+# index指向根路经
 @app.route('/index')
 def index():
     return redirect(url_for('html'))
@@ -50,6 +53,7 @@ def login():
         username = form.data['username']
         password = form.data['password']
         user = User.query.filter_by(username=username).first()
+        # 验证密码
         if user and user.validate_password(password):
             session['user'] = user.username
             print(f'{username} 登陆成功')
@@ -66,17 +70,18 @@ def login():
 @app.route('/logout')
 def logout():
     if session.get('user'):
-        session.pop('user')
+        session.pop('user')  # 删除session中的用户
     return redirect(url_for('index'))
 
 
-# 上下文处理函数
+# 上下文处理函数，全局传出的模板变量username
 @app.context_processor
 def account():
     username = session.get('user')
     return {'username': username}
 
 
+# 上下文处理函数，全局传出的模板变量cates
 @app.context_processor
 def getCateList():
     cates = Category.query.all()
@@ -93,6 +98,7 @@ def test():
     return 'number=' + str(number)
 
 
+# 测试cookie
 @app.route('/test_cookie')
 def test_cookie():
     username = request.cookies.get('username')
@@ -102,6 +108,7 @@ def test_cookie():
     return response
 
 
+# 测试cookie修改
 @app.route('/test_cookie2')
 def test_cookie2():
     number = request.cookies.get('number', '0')
@@ -112,6 +119,7 @@ def test_cookie2():
     return response
 
 
+# 测试session
 @app.route('/test_session')
 def test_session():
     try:
