@@ -1,5 +1,5 @@
 from flask import request, redirect, url_for, render_template, session, jsonify
-from libs import db, csrf
+from libs import db
 from models import Article, Category
 from .admin_app import admin_app
 from forms.article_form import ArticleForm, ArticleSearchForm
@@ -61,8 +61,7 @@ def article_list():
         total = res.total
         pages = res.pages
         # 有条件搜索和无搜索转到同一模板，用模板语法来区分get的链接
-        return render_template('admin/article/article_list.html', articles=articles, pageList=pageList,
-                               total=total,
+        return render_template('admin/article/article_list.html', articles=articles, pageList=pageList, total=total,
                                pages=pages, form=form, q=q, field=form_field, order=form_order)
     else:
         res = Article.query.order_by(Article.id.desc()).paginate(int(page), 10)
@@ -97,7 +96,7 @@ def article_delete():
 # 根据文章id推荐文章
 @admin_app.route('/article/recommend/', methods=['post'])
 def article_recommend():
-    article_id = int(request.form.get('article_id'))
+    article_id = int(request.form.get('article_id'))  # 提交json的data可视为form的数据
     message = {'result': 'fail', 'id': article_id, 'type': 'recommend'}
     if article_id:
         article = Article.query.get(article_id)

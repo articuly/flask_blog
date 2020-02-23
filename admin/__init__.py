@@ -4,3 +4,4 @@ from .category import *
 from .users import *
 from .upload import *
 from .alert import *
+from .comment import *

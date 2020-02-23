@@ -14,6 +14,7 @@ class User(db.Model):
     city = db.Column(db.String)
     hobby = db.Column(db.String)
     intro = db.Column(db.String)
+    comment = db.relationship('Comment')
 
     def hash_password(self, password):
         self.password = generate_password_hash(password)
@@ -33,6 +34,7 @@ class Article(db.Model):
     is_recommend = db.Column(db.Integer)
     pubdate = db.Column(db.DateTime, default=datetime.now)
     cate_id = db.Column(db.Integer, db.ForeignKey('category.cate_id'))
+    comment = db.relationship('Comment')
 
 
 # 目录数据库，是文章的从表
@@ -49,3 +51,13 @@ class Alert(db.Model):
     alert_id = db.Column(db.Integer, primary_key=True)
     alert_time = db.Column(db.DateTime, default=datetime.now)
     alert_content = db.Column(db.String)
+
+
+# 评论数据库
+class Comment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    audited = db.Column(db.Integer)
+    article_id = db.Column(db.Integer, db.ForeignKey('article.id'))
+    author = db.Column(db.String, db.ForeignKey('user.username'))
+    time = db.Column(db.DateTime, default=datetime.now)
+    content = db.Column(db.String)

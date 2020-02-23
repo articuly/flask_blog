@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SelectField, TextAreaField, HiddenField, IntegerField
-from wtforms.validators import DataRequired, NumberRange
+from wtforms.validators import DataRequired, NumberRange, Length
 
 
 # 文章功能表单类
@@ -40,3 +40,10 @@ class CategoryForm(FlaskForm):
                          validators=[DataRequired('分类顺序必须是0-20数字'), NumberRange(0, 20, message='分类顺序必须是1-20数字')],
                          default=1,
                          render_kw={'class': 'form-control'})
+
+
+# 文章评论功能表单类
+class CommentForm(FlaskForm):
+    content = StringField('发表评论：',
+                          validators=[DataRequired('必须输入评论内容'), Length(5, 50, message='请输入5-30个字的评论')],
+                          render_kw={'class': 'form-control', 'placeholder': '请理性发言'})

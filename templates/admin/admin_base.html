@@ -65,6 +65,17 @@
                             </li>
                         </ul>
                     </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                           aria-haspopup="true"
+                           aria-expanded="false">评论管理 <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="{{ url_for("admin_app.comment_audit") }}">审核评论</a>
+                                <a href="{{ url_for("admin_app.comment_list") }}">评论列表</a>
+                            </li>
+                        </ul>
+                    </li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="{{ url_for("admin_app.admin_index") }}">{{ username }}管理后台</a></li>

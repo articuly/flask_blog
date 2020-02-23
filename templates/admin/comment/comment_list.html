@@ -1,0 +1,123 @@
+{% extends "admin/admin_base.html" %}
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="main col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 col-xs-12">
+                <h2 class="text-center"><b>评论列表</b></h2>
+                <div class="panel">
+                    <table class="table">
+                        <tr>
+                            <td><b>通过审核的评论{{ audited_comment }}条，未通过审核的评论{{ failed_comment }}，总共{{ total }}条评论。</b></td>
+                        </tr>
+                        <tr>
+                            <td>说明：字体颜色为蓝色的，是通过审核的评论；字体颜色为灰色的，是未通过审核的评论。</td>
+                        </tr>
+                    </table>
+                    <div class="row"></div>
+                    <table class="table table-bordered">
+                        <tr>
+                            <th>ID</th>
+                            <th>被评论文章ID</th>
+                            <th>评论人</th>
+                            <th>评论内容</th>
+                            <th>评论时间</th>
+                            <th>操作</th>
+                        </tr>
+                        {% for comment in comments %}
+                            <tr id="comment_{{ comment.id }}" class="text-center">
+                                <td>{{ comment.id }}</td>
+                                <td>{{ comment.article_id }}</td>
+                                <td>{{ comment.author }}</td>
+                                <td>{{ comment.content }}</td>
+                                <td>{{ comment.time }}</td>
+                                <td>
+                                    <a href="javascript:audited({{ comment.id }})">通过</a>
+                                    <a href="javascript:failed({{ comment.id }})">不行</a>
+                                    <a href="javascript:delComment({{ comment.id }})">删除</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                    <ul class="pagination">
+                        {% for page in pageList %}
+                            {% if page!=None %}
+                                <li><a href="{{ url_for("admin_app.comment_list", page=page) }}">{{ page }}</a></li>
+                            {% else %}
+                                <li><a href="#">...</a></li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function audited(comment_id) {
+            url = "{{ url_for("admin_app.audited") }}"
+            send_data(url, {"comment_id": comment_id})
+        }
+
+        function failed(comment_id) {
+            url = "{{ url_for("admin_app.failed") }}"
+            send_data(url, {"comment_id": comment_id})
+        }
+
+        function delComment(comment_id) {
+            url = "{{ url_for("admin_app.delComment") }}"
+            send_data(url, {"comment_id": comment_id})
+        }
+
+        function send_data(url, data) {
+            $.ajax({
+                type: "post",
+                url: url,
+                data: data,
+                dataType: "json",
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token() }}")
+                },
+                success: function (data) {
+                    console.log(data)
+                    if (data.result == "success") {
+                        console.log($("#comment_" + data.id))
+                        if (data.type == "audited") {
+                            $("#comment_" + data.id).css({
+                                "color": "blue",
+                                "border": "1px solid blue",
+                            })
+                        } else if (data.type == "failed") {
+                            $("#comment_" + data.id).css({
+                                "color": "lightgray",
+                                "border": "1px solid lightgray",
+                            })
+                        } else if (data.type == "del") {
+                            $("#comment_" + data.id).css({
+                                "color": "red",
+                                "border": "1px solid red",
+                                "text-decoration": "line-through"
+                            })
+                        }
+                    } else {
+                        alert('过程发生错误，请重新尝试')
+                    }
+                }
+            })
+        }
+
+        window.onload = function () {
+            {% for comment in comments %}
+                {% if comment.audited==1 %}
+                    $("#comment_{{ comment.id }}").css({
+                        "color": "blue",
+                        "border": "1px solid blue",
+                    })
+                {% elif comment.audited==2 %}
+                    $("#comment_{{ comment.id }}").css({
+                        "color": "lightgray",
+                        "border": "1px solid lightgray",
+                    })
+                {% endif %}
+            {% endfor %}
+        }
+    </script>
+{% endblock %}

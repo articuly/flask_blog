@@ -7,7 +7,7 @@ from libs import login_required
 upload_app = Blueprint("upload_app", __name__)
 
 
-# 请求前调用的装饰器，判断是否有用户登陆
+# 上传请求前调用的装饰器，判断是否有用户登陆
 @upload_app.before_request
 @login_required
 def is_login():

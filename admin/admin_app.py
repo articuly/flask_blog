@@ -1,6 +1,7 @@
 from flask import session, redirect, url_for, render_template
 from flask import Blueprint
 from libs import login_required
+from models import Comment
 
 admin_app = Blueprint('admin_app', __name__)
 
@@ -18,4 +19,5 @@ def is_admin():
 # 管理后台主页
 @admin_app.route('/')
 def admin_index():
-    return render_template('admin/admin_index.html')
+    not_audit = Comment.query.filter(Comment.audited == None).count()
+    return render_template('admin/admin_index.html', not_audit=not_audit)

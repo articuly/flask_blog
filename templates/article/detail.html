@@ -1,7 +1,9 @@
 {% extends'base.html' %}
-<!DOCTYPE html>
-<html>
-<body>
+{% block style %}
+    .lead {
+    font-size: 1.5em
+    }
+{% endblock %}
 {% block content %}
     <div class="container-fluid">
         <div class="row">
@@ -12,15 +14,70 @@
                         <blockquote>
                             {{ article.intro }}
                         </blockquote>
-                        &nbsp;
-                        {{ article.content |safe }}
+                        <div class="lead">{{ article.content |safe }}</div>
                     </div>
+                    <div class="row"></div>
+                    {% if comments.count() !=0 %}
+                        {#                    有评论的情况#}
+                        <h5 class="text-center">对文章的评论</h5>
+                        {% for comment in comments %}
+                            <ul class="list-group">
+                                <li class="list-group-item">{{ comment.author }}评论说：{{ comment.content }}</li>
+                            </ul>
+                        {% endfor %}
+                    {% else %}
+                        {#                    没有评论的情况#}
+                        {% if not username %}
+                            <h5 class="text-center">还没有对文章的评论，请<a href="{{ url_for('login') }}">登陆</a>发表您的看法。</h5>
+                        {% else %}
+                            <h5 class="text-center">还没有对文章的评论，请在评论框输入您的看法。</h5>
+                        {% endif %}
+                    {% endif %}
+                    {% if username %}
+                        {#                    有用户登陆的情况#}
+                        <form action="" method="post">
+                        <div class="form-group">
+                            {{ form.content.label }}
+                            {{ form.content }}
+                        </div>
+                        <div class="form-group">
+                            <input class="btn btn-primary pull-right" type="button" name="btn" id="btn1" value="立即评论"/>
+                        </div>
+                    {% endif %}
+                    </form>
                 </article>
                 <div class="row"></div>
-                <div class="row"></div>
+                <div class="row">
+                    <h4 id="message" class="text-center"></h4>
+                </div>
             </div>
         </div>
     </div>
+    <script>
+        btn = document.getElementById("btn1")
+        btn.onclick = function (event) {
+            content = $("#content").val()
+            console.log(content)
+            $.ajax({
+                type: "post",
+                data: {
+                    "content": content
+                },
+                dataType: "json",
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token() }}")
+                },
+                success: function (data) {
+                    console.log(data)
+                    if (data['result'] == 'success') {
+                        $("#message").html("评论发表成功，请等待管理员审核")
+                        // 成功后重置
+                        $("#content").val("")
+                    } else {
+                        $("#message").html("<p style='color: red;'>" + data['content'] + "</p>")
+                    }
+                }
+            })
+        }
+    </script>
 {% endblock %}
-</body>
-</html>

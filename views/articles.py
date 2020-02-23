@@ -1,17 +1,50 @@
-from flask import redirect, url_for, render_template, request
-from models import Article, Category, Alert
+from flask import redirect, url_for, render_template, request, session, jsonify
+from models import Article, Category, Alert, Comment
+from libs import db
 from flask import Blueprint
+from forms.article_form import CommentForm
 
 article_app = Blueprint('article_app', __name__)
 
 
-# 根据文章id阅读文章
-@article_app.route('/view/<int:article_id>')
+# 根据文章id阅读文章并显示评论功能
+@article_app.route('/view/<int:article_id>', methods=['get', 'post'])
 def view(article_id):
     article = Article.query.get(article_id)
-    if not article:
-        return redirect(url_for('article_app.list'))
-    return render_template('article/detail.html', article=article)
+    if not article:  # 没有找到文章跳到主页
+        return redirect(url_for('html'))
+
+    # 只显示最新30条已审核的与文章ID相同的文章评论
+    comments = Comment.query.filter(Comment.article_id == article_id).filter(Comment.audited == 1).order_by(
+        Comment.time.desc()).limit(15)
+    print(comments.count(), '条评论')
+
+    # 发表评论功能，有用户登陆才显示表单
+    if 'user' in session:
+        form = CommentForm()
+        message = {'result': 'fail'}
+        if form.validate_on_submit():
+            content = form.data['content']
+            comment = Comment(
+                author=session['user'],
+                article_id=article.id,
+                content=content
+            )
+            try:
+                db.session.add(comment)
+                db.session.commit()
+            except Exception as e:
+                print(str(e))
+            else:
+                message = {'result': 'success'}
+            return jsonify(message)
+        elif form.errors:
+            print(form.errors)
+            message.update(form.errors)
+            return jsonify(message)
+        else:
+            return render_template('article/detail.html', article=article, comments=comments, form=form)
+    return render_template('article/detail.html', article=article, comments=comments)
 
 
 # 根据文章cate_id显示文章列表

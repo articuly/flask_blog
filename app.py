@@ -51,6 +51,7 @@ def html(page):
         total = res.total
         return render_template('search_articles.html', articles=articles, pageList=pageList, total=total, page=page,
                                q=q, recommend_articles=recommend_articles)
+
     # 按最新发布的顺序显示文章
     res = Article.query.order_by(Article.id.desc()).paginate(page, 10)
     articles = res.items
