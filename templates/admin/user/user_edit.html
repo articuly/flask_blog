@@ -1,6 +1,7 @@
 {% extends "admin/admin_base.html" %}
 <!DOCTYPE html>
 <html>
+{# 解决多选框贴近的问题 #}
 {% block style %}
     input[name="hobby"]{
     margin-right: 20px;
@@ -115,6 +116,7 @@
                     {#								{{ user.intro }}#}
                     {#							</textarea>#}
                     {#                        </div>#}
+                    {#                                        </form>#}
                     {% for field in form %}
                         {% if field.widget.input_type!="hidden" %}
                             <div class="form-group">
@@ -129,13 +131,14 @@
                         <input class="btn" type="button" name="submit" id="btn1" value="修改信息"/>
                         <input class="btn" type="button" name="closeTab" onclick="closeTab()" id="btn2" value="直接关闭"/>
                     </div>
-                    {#                                        </form>#}
                 </div>
             </div>
         </div>
     </div>
     <script src="{{ url_for('static', filename="ckeditor/ckeditor.js") }}"></script>
     <script>
+        {# 可修改后关闭，或者不修改直接关闭 #}
+
         function closeTab() {
             window.close()
         }

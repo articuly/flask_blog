@@ -26,6 +26,7 @@
         btn = $("input.btn")
         console.log(progress, message, image, btn)
 
+        {# 点击提交时，将图片地址加入数组，提交数据，创建XHR #}
         btn.on("click", function () {
             files = document.getElementById("file").files
             console.log(files)
@@ -46,6 +47,7 @@
                     if (data.result == "success") {
                         message.html("上传成功")
                         console.log(data.filepath_list)
+                        {# 上传成功后，根据回传的图片地址用IMG标签显示出来 #}
                         for (i in data.filepath_list) {
                             img = $("<img />")
                             img.attr("src", data.filepath_list[i])

@@ -36,13 +36,16 @@
 </div>
 </div>
 <script>
+    {# CKEditor点浏览文件后会打开一个窗口，地址会包括替换了的文本域和实例数 #}
     funcNum = {{ request.args.get('CKEditorFuncNum') }}
         ul = document.getElementById('images')
     ul.onclick = function (ev) {
         target = ev.target
         console.log(target)
+        // 取得点击对象的地址URL
         url = target.dataset.url
         console.log(url)
+        // 调回得到的URL
         window.opener.CKEDITOR.tools.callFunction(funcNum, url);
         window.close()
     }

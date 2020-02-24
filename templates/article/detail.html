@@ -17,8 +17,8 @@
                         <div class="lead">{{ article.content |safe }}</div>
                     </div>
                     <div class="row"></div>
+                    {# 有评论的情况 #}
                     {% if comments.count() !=0 %}
-                        {#                    有评论的情况#}
                         <h5 class="text-center">对文章的评论</h5>
                         {% for comment in comments %}
                             <ul class="list-group">
@@ -26,7 +26,7 @@
                             </ul>
                         {% endfor %}
                     {% else %}
-                        {#                    没有评论的情况#}
+                        {# 没有评论的情况 #}
                         {% if not username %}
                             <h5 class="text-center">还没有对文章的评论，请<a href="{{ url_for('login') }}">登陆</a>发表您的看法。</h5>
                         {% else %}
@@ -34,7 +34,7 @@
                         {% endif %}
                     {% endif %}
                     {% if username %}
-                        {#                    有用户登陆的情况#}
+                        {# 有用户登陆的情况，显示评论框 #}
                         <form action="" method="post">
                         <div class="form-group">
                             {{ form.content.label }}
@@ -70,10 +70,12 @@
                 success: function (data) {
                     console.log(data)
                     if (data['result'] == 'success') {
+                        // 评论成功后只提示，管理员审核后才显示
                         $("#message").html("评论发表成功，请等待管理员审核")
-                        // 成功后重置
+                        // 成功后重置评论框
                         $("#content").val("")
                     } else {
+                        // 显示表单类数据验证的提示
                         $("#message").html("<p style='color: red;'>" + data['content'] + "</p>")
                     }
                 }

@@ -2,10 +2,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-
 </head>
 <body>
 {% block content %}
+    {# 根据分类名称改变面包屑导航的显示 #}
     <ol class="breadcrumb">
         <li><a href="{{ url_for('html') }}">主页</a></li>
         <li><a href="#">文章分类</a></li>
@@ -20,6 +20,7 @@
                         {% for article in articles %}
                             <li class="media">
                                 <div class="pull-left">
+                                    {# 缩略图为空则显示默认图片，否则显示上传的缩略图 #}
                                     {% if article.thumb==None or article.thumb=="" %}
                                         <img src="{{ url_for('static', filename='img/side/articuly.jpg') }}"
                                              class="media-object" style="width: 120px; height: 120px;">
@@ -41,6 +42,7 @@
                     </ul>
                     <nav aria-label="Page navigation">
                         <ul class="pagination">
+                            {# 如果有前一页、后一页，则显示前后一页的翻页跳转，需要分页对象传到前端 #}
                             {% if res.has_prev %}
                                 <li>
                                     <a href="{{ url_for('article_app.getArticleList', cate_id=cate_id, page=res.prev_num ) }}"

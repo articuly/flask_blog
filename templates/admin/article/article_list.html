@@ -45,7 +45,7 @@
                                 </div>
                             </div>
                         </div>
-                        {#                        {{ form.csrf_token }}#}
+                        {#{{ form.csrf_token }}#}
                         <div class="form-group ">
                             <a href="{{ url_for("admin_app.article_post") }}"><input type="button" name="post"
                                                                                      class="btn btn-primary"
@@ -128,6 +128,7 @@
                     console.log(data)
                     if (data.result == "success") {
                         console.log($("#article_" + data.id))
+                        // 操作之后改变样式
                         $("#article_" + data.id).toggleClass(data.type)
                     } else {
                         alert('过程发生错误，请重新尝试')
@@ -136,6 +137,7 @@
             })
         }
 
+        {# 页面加载后将被推荐的文章改成蓝色样式 #}
         window.onload = function () {
             {% for article in articles %}
                 {% if article.is_recommend!=None %}

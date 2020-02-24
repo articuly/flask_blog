@@ -16,6 +16,7 @@
                     {% if message!=None %}
                         <div class="alert alert-info" id="message" role="alert">{{ message }}</div>
                     {% endif %}
+                    {# 普通表单提交要写FORM标签和提交方法，AJAX可不用 #}
                     <form action="" method="post">
                         {% for field in form %}
                             {% if field.widget.input_type!='hidden' %}

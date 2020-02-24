@@ -1,4 +1,5 @@
 {% extends "admin/admin_base.html" %}
+{# 查看审核过后的评论的功能 #}
 {% block content %}
     <div class="container-fluid">
         <div class="row">
@@ -52,6 +53,8 @@
         </div>
     </div>
     <script>
+        {# 审核过后仍然可以改变评论的状态，并改变成不同的样式 #}
+
         function audited(comment_id) {
             url = "{{ url_for("admin_app.audited") }}"
             send_data(url, {"comment_id": comment_id})
@@ -104,6 +107,7 @@
             })
         }
 
+        {# 网页加载后改变通过和不通过评论的样式 #}
         window.onload = function () {
             {% for comment in comments %}
                 {% if comment.audited==1 %}

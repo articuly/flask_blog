@@ -22,9 +22,10 @@
         progress = document.getElementById("progress")
         message = document.getElementById("message")
         image = document.getElementById("image")
-        // querySelector只会选到第一个.btn，而模板新一个是在导航栏
+        // querySelector只会选到第一个.btn，而模板第一个是在导航栏
         btn = document.querySelector("input.btn")
         console.log(progress, message, image, btn)
+        // 新建XHR对象处理上传进度
         xhr = new XMLHttpRequest()
 
         xhr.upload.onloadstart = function (ev) {

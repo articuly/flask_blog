@@ -3,6 +3,7 @@
 <html>
 <body>
 {% block content %}
+    {# dropzone的css, js和自定义样式 #}
     {{ dropzone.load_css() }}
     {{ dropzone.style('border: 2px dashed #0087F7; margin: 2%') }}
     {{ dropzone.load_js() }}
@@ -20,6 +21,7 @@
                         {% else %}
                             {{ field }}
                             {% if field.name=="thumb" %}
+                                {# 加载后要创建dropzone的上传域和上传调用的url #}
                                 {{ dropzone.create(action="upload_app.ckeditor_upload") }}
                             {% endif %}
                         {% endif %}
@@ -75,9 +77,10 @@
     <script src="{{ url_for('static', filename="ckeditor/ckeditor.js") }}"></script>
     <script>
         CKEDITOR.replace('content', {
+            // 配置上传和浏览文件指向的地址，需要对应的后台视图函数来处理
             filebrowserUploadUrl: '/upload/ckeditor',
             filebrowserBrowseUrl: '/upload/ckeditor/browser',
-            //CSRF启用后，需要按照CSRF要求传递CSRF_TOKEN
+            // CSRF启用后，需要按照CSRF要求传递CSRF_TOKEN
             fileTools_requestHeaders: {
                 "X-Requested-width": "XMLHttpRequest",
                 "X-CSRF-Token": "{{ csrf_token() }}"

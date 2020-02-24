@@ -35,6 +35,7 @@
                             <div class="form-group">
                                 {{ field.label(class="control-label") }}
                                 {{ field }}
+                                {# 如果发生表单类数据验证错误则在前端提示 #}
                                 {% if field.errors %}
                                     <div class="alert alert-warning alert-dismissable" role="alert">
                                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
