@@ -43,6 +43,9 @@
                 processData: false,
                 contentType: false,
                 dataType: "json",
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token() }}")
+                },
                 success: function (data) {
                     if (data.result == "success") {
                         message.html("上传成功")

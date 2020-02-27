@@ -14,6 +14,7 @@
                     <input type="file" name="file" id="file" class="form-control"
                            multiple="multiple">
                     <input type="button" name="btn" value="上传" class="btn btn-primary">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                 </div>
             </div>
         </div>
@@ -27,6 +28,8 @@
         console.log(progress, message, image, btn)
         // 新建XHR对象处理上传进度
         xhr = new XMLHttpRequest()
+        csrf = document.querySelector('input[name="csrf_token"]').value
+        console.log(csrf)
 
         xhr.upload.onloadstart = function (ev) {
             message.innerHTML = "开始上传"
@@ -67,6 +70,9 @@
             }
             console.log(data)
             xhr.open("post", "/admin/by_xhr")
+            xhr.setRequestHeader('x-csrf-token', csrf);
+            xhr.setRequestHeader("Content-Type", "application/json; charset=utf-8");
+            xhr.setRequestHeader("Accept", "application/json");
             xhr.send(data)
         }
     </script>
