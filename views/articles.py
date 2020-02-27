@@ -14,7 +14,7 @@ def view(article_id):
     if not article:  # 没有找到文章跳到主页
         return redirect(url_for('html'))
 
-    # 只显示最新30条已审核的与文章ID相同的文章评论
+    # 只显示最新15条已审核的与文章ID相同的文章评论
     comments = Comment.query.filter(Comment.article_id == article_id).filter(Comment.audited == 1).order_by(
         Comment.time.desc()).limit(15)
     print(comments.count(), '条评论')
