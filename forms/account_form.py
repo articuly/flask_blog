@@ -72,7 +72,7 @@ class RegisterForm(FlaskForm):
     hobby = CheckBoxField('爱好：', choices=[('travel', '旅行'), ('reading', '阅读'), ('singing', '唱歌'), ('dancing', '跳舞'),
                                           ('writing', '写作'), ('swimming', '游泳'), ('playing basketball', '打篮球')],
                           render_kw={"class": "checkbox-inline"})
-    city = SelectField('城市：', validators=[DataRequired('必须所有城市')],
+    city = SelectField('城市：', validators=[DataRequired('必须所在城市')],
                        choices=[('', '请选择城市'), ('010', '北京'), ('021', '上海'), ('020', '广州'), ('0755', '深圳'),
                                 ('0571', '杭州'), ('023', '重庆'), ('0512', '苏州')],
                        render_kw={'class': 'form-control'})
@@ -102,7 +102,7 @@ class AdminEditInfoForm(FlaskForm):
     hobby = CheckBoxField('爱好：', choices=[('travel', '旅行'), ('reading', '阅读'), ('singing', '唱歌'), ('dancing', '跳舞'),
                                           ('writing', '写作'), ('swimming', '游泳'), ('playing basketball', '打篮球')],
                           render_kw={"class": "checkbox-inline"})
-    city = SelectField('城市：', validators=[DataRequired('必须所有城市')],
+    city = SelectField('城市：', validators=[DataRequired('必须所在城市')],
                        choices=[('', '请选择城市'), ('010', '北京'), ('021', '上海'), ('020', '广州'), ('0755', '深圳'),
                                 ('0571', '杭州'), ('023', '重庆'), ('0512', '苏州')],
                        render_kw={'class': 'form-control'})
@@ -136,7 +136,7 @@ class EditInfoForm(FlaskForm):
     hobby = CheckBoxField('爱好：', choices=[('travel', '旅行'), ('reading', '阅读'), ('singing', '唱歌'), ('dancing', '跳舞'),
                                           ('writing', '写作'), ('swimming', '游泳'), ('playing basketball', '打篮球')],
                           render_kw={"class": "checkbox-inline"})
-    city = SelectField('城市：', validators=[DataRequired('必须所有城市')],
+    city = SelectField('城市：', validators=[DataRequired('必须所在城市')],
                        choices=[('', '请选择城市'), ('010', '北京'), ('021', '上海'), ('020', '广州'), ('0755', '深圳'),
                                 ('0571', '杭州'), ('023', '重庆'), ('0512', '苏州')],
                        render_kw={'class': 'form-control'})
