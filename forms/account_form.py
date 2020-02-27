@@ -141,3 +141,6 @@ class EditInfoForm(FlaskForm):
                                 ('0571', '杭州'), ('023', '重庆'), ('0512', '苏州')],
                        render_kw={'class': 'form-control'})
     intro = CKEditorField('简介:', render_kw={'class': 'form-control'})
+    password = PasswordField('验证密码：',
+                             validators=[DataRequired(message='必须提供密码'), Length(6, 20, message='密码长度在6-20位之间')],
+                             render_kw={'class': 'form-control', 'placeholder': "请输入自己的密码"})

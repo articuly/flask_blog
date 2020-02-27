@@ -8,7 +8,6 @@ from forms.account_form import EditInfoForm
 # 会员修改自己的信息，普通会员只能修改自己的资料
 @member_app.route("/user/edit/", methods=['get', 'post'])
 def userEdit():
-    # TODO 修改资料的时候还需要验证密码
     message = None
     form = EditInfoForm()
     user = User.query.filter_by(username=session['user']).one()
@@ -18,12 +17,16 @@ def userEdit():
         user.hobby = ', '.join(form.data['hobby'])
         user.city = form.data['city']
         user.intro = form.data['intro']
-        try:
-            db.session.commit()
-            message = '修改成功'
-        except Exception as e:
-            print(str(e))
-            message = '后台发生错误'
+        password = form.data['password']
+        if user.validate_password(password):
+            try:
+                db.session.commit()
+                message = '修改成功'
+            except Exception as e:
+                print(str(e))
+                message = '后台发生错误'
+        else:
+            message = '用户名与密码不匹配'
     elif form.errors:
         print(form.errors)
         message = '表单发生错误'
