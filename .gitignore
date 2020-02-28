@@ -14,5 +14,4 @@ __pycache__/app.cpython-37.pyc
 __pycache__/libs.cpython-37.pyc
 __pycache__/models.cpython-37.pyc
 __pycache__/utils.cpython-37.pyc
-views/__pycache__/articles.cpython-37.pyc
 views/__pycache__/users.cpython-37.pyc
