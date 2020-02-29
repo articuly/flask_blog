@@ -12,7 +12,7 @@ csrf = CSRFProtect()
 dropzone = Dropzone()
 
 
-# functiools.wraps方式修饰全局的函数，如果没有登陆则跳转到登陆页
+# functools.wraps方式修饰全局的函数，如果没有登陆则跳转到登陆页
 def login_required(func):
     @wraps(func)
     def decorator_nest(*args, **kwargs):
